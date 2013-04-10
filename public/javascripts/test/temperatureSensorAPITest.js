@@ -3,7 +3,23 @@
  * Date: 05/04/2013
  * Time: 10:19
  */
-module('Temperature Sensor on Client-side');
+
+// WAMP Server session
+var sess;
+
+module('Temperature Sensor on Client-side',{
+    setup : function(){
+        // connect to WAMP Server
+        window.onload = init(successCB, errorCB);
+        function successCB (session){
+            sess = session;
+        }
+        function errorCB(reason){
+            sess = null;
+            throw reason;
+        }
+    }
+});
 asyncTest('init a sensor - without configuration',function(){
     var OriginalConfiguration = {
         componentType: "temperature",

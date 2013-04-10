@@ -3,13 +3,13 @@
  * Date: 09/04/2013
  * Time: 12:46
  */
-var GenericSensor = require('GenericComponentAPI');
+var GenericComponent = require('./GenericComponentAPI');
 var Constant = require('../sensor/Constant');
 
 function LightActuator (configuration) {
     var self = this;
 
-    self.aGenericComponent = new GenericSensor();
+    self.aGenericComponent = new GenericComponent();
     self.aComponentEvent = new self.aGenericComponent.componentEvent();
 
     /**
@@ -26,6 +26,7 @@ function LightActuator (configuration) {
     self.strength = Constant.ComponentSpec.default.switch.off;
 
     self.switchLight = function (successfulCallback,errorCallback){
+        /* NEED TO CHANGE - sCB and eCB will be both called */
         if (successfulCallback && typeof successfulCallback === 'function'){
             successfulCallback();
         }
@@ -40,7 +41,7 @@ function LightActuator (configuration) {
      * by calling 'config'
      */
     self.resetActuatorState = function () {
-        self.aGenericComponent = new GenericSensor();
+        self.aGenericComponent = new GenericComponent();
         self.aComponentEvent = new self.aGenericComponent.componentEvent();
         self.configuration = Constant.ComponentSpec.default.config;
         self.config();
@@ -78,7 +79,7 @@ function LightActuator (configuration) {
 
             // initialise Sensor Event
             options = {
-                type : configuration.type || Constant.EventType.actuator,
+                type : Constant.EventType.actuator,
                 returnValue : Constant.ComponentSpec.default.data,
                 cancelable: configuration.cancelable || Constant.CancelAble.false,
                 // validation will be check in GenericSensorAPI
@@ -99,16 +100,17 @@ function LightActuator (configuration) {
             options = {
                 componentType: Constant.ComponentSpec.type.actuator.switch,
                 type : Constant.EventType.actuator,
-                callback : self.updateTemperatureOnSensor
+                callback : self.switchLight
             };
+            // configure upper level
             self.aGenericComponent.configureComponent(options);
             self.aComponentEvent.initComponentEvent(options);
+            // configure its own property
+            self.switchMode = Constant.ComponentSpec.default.switchMode.onoff;
+            self.strength = Constant.ComponentSpec.default.switch.off;
         }
         // set configuration
         self.configuration = {
-            switchMode : self.switchMode,
-            strength : self.strength,
-            strength : Constant.ComponentSpec.default.data.strength,
             componentType: self.aGenericComponent.componentType,
             deviceID: self.aGenericComponent.deviceID,
             returnable: self.aGenericComponent.returnable,
@@ -124,7 +126,10 @@ function LightActuator (configuration) {
             version : self.aGenericComponent.version,
 
             type : self.aComponentEvent.type,
-            cancelable: self.aComponentEvent.cancelable
+            cancelable: self.aComponentEvent.cancelable,
+
+            switchMode : self.switchMode,
+            strength : self.strength
         }
     };
 

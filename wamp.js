@@ -12,6 +12,7 @@
 var express = require('express') //http://nodejs.org/api/modules.html#modules_modules
     , routes = require('./routes')
     , api = require('./routes/api')()
+    , room = require('./routes/room')
     , http = require('http')
     , path = require('path')
     , WebSocketServer = require('ws').Server
@@ -51,8 +52,8 @@ function enableWamp(req, res, next) {
 
 // get methods
 app.get('/', routes.index);
+app.get('/room',room.show);
 app.get('/test', function(req,res){
-//    res.sendfile(__dirname + '/public/test/sensorGenericAPITest.html');
     res.sendfile(__dirname + '/public/test/temperatureSensorTest.html');
 });
 

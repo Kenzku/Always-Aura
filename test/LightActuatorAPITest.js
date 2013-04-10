@@ -5,7 +5,7 @@
  */
 var assert = require("assert");
 var expect = require('chai').expect;
-var TemperatureSensor = require('../sensor/LightActuatorAPI');
+var LightActuator = require('../sensor/LightActuatorAPI');
 var GenericComponent = require('../sensor/GenericComponentAPI');
 var Constant = require('../sensor/Constant');
 
@@ -19,38 +19,19 @@ test("properties - without configuration", function() {
     var aLightActuator = new LightActuator();
     var aGenericComponent = new GenericComponent();
 
-    var configInActuator = {
-        componentType: "switch",
-        deviceID: "",
-        returnable: false,
-        timeout: 100.0,
-        rate: 50.0,
-        eventFireMode: "fixedinterval",
-        position: {latitude:0.0,longitude:0.0},
-        maximumRange : null,
-        minDelay : null,
-        power : null,
-        resolution : null,
-        vendor : null,
-        version : null,
-
-        type : 'actuator',
-        cancelable: false
-    };
-
-    /* property */
+    /* default property */
     assert.ok(aLightActuator.aGenericComponent instanceof GenericComponent);
     assert.ok(aLightActuator.aComponentEvent instanceof aLightActuator.aGenericComponent.componentEvent);
-    assert.equal(aLightActuator.temperature, Constant.ComponentSpec.default.data);
-    assert.equal(aLightActuator.temperature, null);
-    assert.deepEqual(aLightActuator.getData(true),configInActuator);
-    assert.deepEqual(aLightActuator.getData(), true);
+    assert.deepEqual(aLightActuator.switchMode, Constant.ComponentSpec.default.switchMode.onoff);
+    assert.deepEqual(aLightActuator.switchMode, 'onoff');
+    assert.deepEqual(aLightActuator.strength,Constant.ComponentSpec.default.switch.off);
+    assert.deepEqual(aLightActuator.strength,false);
 
-    /* configuration */
+    /* default configuration */
     assert.equal(aLightActuator.aGenericComponent.componentType, Constant.ComponentSpec.type.actuator.switch);
     assert.equal(aLightActuator.aGenericComponent.componentType, "switch");
     assert.equal(aLightActuator.aGenericComponent.deviceID,"");
-    assert.equal(aLightActuator.aGenericComponent.returnable,false);
+    assert.equal(aLightActuator.aGenericComponent.returnable,true);
     assert.equal(aLightActuator.aGenericComponent.timeout,100.0);
     assert.equal(aLightActuator.aGenericComponent.rate, 50.0);
     assert.equal(aLightActuator.aGenericComponent.eventFireMode,"fixedinterval");
@@ -92,10 +73,14 @@ test("properties - without configuration", function() {
         version:1.0,
 
         type : 'actuator',
-        cancelable: Constant.CancelAble.true
+        cancelable: Constant.CancelAble.true,
+
+        switchMode : Constant.ComponentSpec.default.switchMode.dial,
+        strength : 50
     }
     aLightActuator.config(configuration);
 
+    /* configured property */
     assert.equal(aLightActuator.aGenericComponent.componentType, Constant.ComponentSpec.type.actuator.switch);
     assert.equal(aLightActuator.aGenericComponent.componentType, "switch");
     assert.equal(aLightActuator.aGenericComponent.deviceID,"12314213432432423154235");
@@ -104,6 +89,10 @@ test("properties - without configuration", function() {
     assert.equal(aLightActuator.aGenericComponent.rate, 20.0);
     assert.equal(aLightActuator.aGenericComponent.eventFireMode,"valuechange");
     assert.deepEqual(aLightActuator.aGenericComponent.position,{latitude:20.123412,longitude: 81.9023213});
+
+    assert.deepEqual(aLightActuator.switchMode, Constant.ComponentSpec.default.switchMode.dial);
+    assert.deepEqual(aLightActuator.switchMode, 'dial');
+    assert.deepEqual(aLightActuator.strength,0.5); // calculated by the actuator
 
     assert.deepEqual(aLightActuator.aGenericComponent.maximumRange, 10);
     assert.deepEqual(aLightActuator.aGenericComponent.minDelay, 40.0);
@@ -114,8 +103,6 @@ test("properties - without configuration", function() {
 
     assert.deepEqual(aLightActuator.aComponentEvent.type,'actuator');
     assert.deepEqual(aLightActuator.aComponentEvent.cancelable, true);
-
-    assert.deepEqual(aLightActuator.getData(true),configuration);
 
 });
 
@@ -136,8 +123,11 @@ test("properties - with configuration",function(done){
         vendor:"Huawei",
         version:1.0,
 
-        type : 'sensor',
-        cancelable: Constant.CancelAble.true
+        type : 'actuator',
+        cancelable: Constant.CancelAble.true,
+
+        switchMode : Constant.ComponentSpec.default.switchMode.dial,
+        strength : 90
     }
 
     var configInActuator = {
@@ -156,8 +146,11 @@ test("properties - with configuration",function(done){
         vendor:"Huawei",
         version:1.0,
 
-        type : 'sensor',
-        cancelable: Constant.CancelAble.true
+        type : 'actuator',
+        cancelable: Constant.CancelAble.true,
+
+        switchMode : 'dial',
+        strength : 0.9 // SIMILATION: this has been calculated by the sensor
     };
 
     var OriginalConfigInSensor = {
@@ -175,11 +168,14 @@ test("properties - with configuration",function(done){
         vendor : null,
         version : null,
 
-        type : 'sensor',
-        cancelable: false
+        type : 'actuator',
+        cancelable: false,
+
+        switchMode : Constant.ComponentSpec.default.switchMode.onoff,
+        strength : Constant.ComponentSpec.default.switch.off
     };
 
-    var aLightActuator = new TemperatureSensor(configuration);
+    var aLightActuator = new LightActuator(configuration);
 
     assert.equal(aLightActuator.aGenericComponent.componentType, Constant.ComponentSpec.type.actuator.switch);
     assert.equal(aLightActuator.aGenericComponent.componentType, "switch");
@@ -190,6 +186,10 @@ test("properties - with configuration",function(done){
     assert.equal(aLightActuator.aGenericComponent.eventFireMode,"valuechange");
     assert.deepEqual(aLightActuator.aGenericComponent.position,{latitude:20.123412,longitude: 81.9023213});
 
+    assert.deepEqual(aLightActuator.switchMode, Constant.ComponentSpec.default.switchMode.dial);
+    assert.deepEqual(aLightActuator.switchMode, 'dial');
+    assert.deepEqual(aLightActuator.strength,0.9);
+
     assert.deepEqual(aLightActuator.aGenericComponent.maximumRange, 10);
     assert.deepEqual(aLightActuator.aGenericComponent.minDelay, 40.0);
     assert.deepEqual(aLightActuator.aGenericComponent.power, 30.1);
@@ -197,23 +197,24 @@ test("properties - with configuration",function(done){
     assert.deepEqual(aLightActuator.aGenericComponent.vendor, "Huawei");
     assert.deepEqual(aLightActuator.aGenericComponent.version,1.0);
 
-    assert.deepEqual(aLightActuator.aComponentEvent.type,'sensor');
+    assert.deepEqual(aLightActuator.aComponentEvent.type,'actuator');
     assert.deepEqual(aLightActuator.aComponentEvent.cancelable, true);
 
-    assert.deepEqual(aLightActuator.getData(true),configInActuator);
+    assert.deepEqual(aLightActuator.configuration,configInActuator);
 
     // reset everything
-    aLightActuator.resetActuatorState(true);
+    aLightActuator.resetActuatorState();
 
     var aGenericSensor = new GenericComponent();
 
     /* property */
     assert.ok(aLightActuator.aGenericComponent instanceof GenericComponent);
     assert.ok(aLightActuator.aComponentEvent instanceof aLightActuator.aGenericComponent.componentEvent);
-    assert.equal(aLightActuator.temperature, Constant.ComponentSpec.default.data);
-    assert.equal(aLightActuator.temperature, null);
-    assert.deepEqual(aLightActuator.getData(true),OriginalConfigInSensor);
-    assert.deepEqual(aLightActuator.getData(), true);
+    assert.deepEqual(aLightActuator.configuration, OriginalConfigInSensor);
+
+    assert.deepEqual(aLightActuator.switchMode, Constant.ComponentSpec.default.switchMode.onoff);
+    assert.deepEqual(aLightActuator.switchMode, 'onoff');
+    assert.deepEqual(aLightActuator.strength,false);
 
     /* configuration */
     assert.equal(aLightActuator.aGenericComponent.componentType, Constant.ComponentSpec.type.actuator.switch);
@@ -233,7 +234,7 @@ test("properties - with configuration",function(done){
     assert.deepEqual(aLightActuator.aGenericComponent.version,null);
 
     assert.equal(aLightActuator.aComponentEvent.type, Constant.EventType.actuator);
-    assert.equal(aLightActuator.aComponentEvent.type, "switch");
+    assert.equal(aLightActuator.aComponentEvent.type, "actuator");
     assert.deepEqual(aLightActuator.aComponentEvent.cancelable, false);
     assert.equal(aLightActuator.aComponentEvent.eventFireMode, aGenericSensor.eventFireMode);
     assert.deepEqual(aLightActuator.aComponentEvent.position,aGenericSensor.position);
@@ -244,21 +245,17 @@ test("properties - with configuration",function(done){
     /* callback function's behaviour */
     expect(aLightActuator.aComponentEvent.callback).to.be.a('function');
     /* callback function on Generic Sensor API - on the sensor */
-    var result = aLightActuator.aComponentEvent.callback(successCB_1,errorCB);
+    var result = aLightActuator.aComponentEvent.callback(successCB_1);
     /* doAction on Generic Sensor API - on the sensor */
-    var result = aLightActuator.currentTemperature(successCB_2,errorCB);
+    var result = aLightActuator.switchLight(successCB_2);
 
     function successCB_1(result){
-        assert.deepEqual(result, null);
+        assert.ok(true);
+        console.log("1");
     }
     function successCB_2(result){
-        assert.deepEqual(result,null);
-        assert.deepEqual(result,aLightActuator.temperature);
-        assert.deepEqual(aLightActuator.aComponentEvent.returnValue,null);
-        done();
-    }
-    function errorCB (err){
-        assert.ok;
+        assert.ok(true);
+        console.log("2");
         done();
     }
 });

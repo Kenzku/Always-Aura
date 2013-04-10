@@ -2,33 +2,9 @@
  * Author: Ken
  * Date: 05/04/2013
  * Time: 10:14
+ * NOTE: initwamp.js should have been called before hand,
+ * so that the WAMP connection has been setup.
  */
-var sess;
-var PORT = "3000";
-window.onload = init;
-
-function init (){
-    // connect to WAMP server
-    ab.connect("ws://localhost:" + PORT,
-
-        // WAMP session was established
-        function (session) {
-            // {{ab.Session}} things to do once the session has been established
-            sess = session;
-            console.log("Connected!");
-            // establish a prefix, so we can abbreviate procedure URIs ..
-            session.prefix("sensor", "http://localhost" + PORT + "/sensor#");
-        },
-
-        // WAMP session is gone: failure, closing, or brake-off
-        function (code, reason) {
-
-            // things to do once the session fails
-            sess = null;
-            console.log(reason);
-        }
-    );
-}
 /**
  * initialise a sensor
  * @param type {String} either 'sensor' or 'actuator'
