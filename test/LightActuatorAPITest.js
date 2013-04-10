@@ -203,7 +203,7 @@ test("properties - with configuration",function(done){
     assert.deepEqual(aLightActuator.configuration,configInActuator);
 
     // reset everything
-    aLightActuator.resetActuatorState();
+    aLightActuator.resetState();
 
     var aGenericSensor = new GenericComponent();
 

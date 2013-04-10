@@ -4,11 +4,12 @@
  * Time: 16:03
  */
 var TemperatureSensor = require('../sensor/TemperatureSensorAPI');
+var LightActuator = require('../sensor/LightActuatorAPI');
 var GenericSensor = require('../sensor/GenericComponentAPI');
 var Constant = require('../sensor/Constant');
 
 // temperature sensor
-var aSensor;
+var aComponent;
 
 module.exports = function api_module(cfg){
     // procedures
@@ -18,9 +19,9 @@ module.exports = function api_module(cfg){
          * @param args [type, [config]]
          * @param cb
          */
-        'sensor:init' : function(args,cb){
+        'component:init' : function(args,cb){
             var args = args.shift();
-            var result = init(args);
+            var result = initComponent(args);
             // cb (err, successResult);
             cb(null,result);
         },
@@ -29,8 +30,8 @@ module.exports = function api_module(cfg){
          * @param args NOT IN USE
          * @param cb callback function when reset success or failed
          */
-        'sensor:reset' : function(args,cb){
-            var result = reset();
+        'component:reset' : function(args,cb){
+            var result = resetComponent();
             result ? cb(null,result) : cb(Constant.Error.reset.NO_INIT);
         },
         'sensor:getData' : function(args,cb) {
@@ -65,7 +66,7 @@ module.exports = function api_module(cfg){
 
 }
 
-function whichSensor(args){
+function whichComponent(args){
     var type = args.shift();
     var config = args.length == 1 ? args.shift() : null;
     switch (type) {
@@ -82,31 +83,45 @@ function whichSensor(args){
                 return new TemperatureSensor();
             }
             break;
+        case 'switch':
+            if(config && typeof config === 'object'){
+                // console.log(config);
+                if(config.callback){
+                    // for safety reason, even though functions will be eliminated
+                    delete config.callback;
+                }
+                // console.log(config);
+                return new LightActuator(config);
+            } else{
+                return new LightActuator();
+            }
+            break;
         default :
+            /* -- NOT TESTED YET -- */
             return new GenericSensor();
             break;
     }
 }
 
-function init (args) {
-    aSensor = whichSensor(args);
-    if (aSensor){
-        return aSensor.getData(true);
+function initComponent (args) {
+    aComponent = whichComponent(args);
+    if (aComponent){
+        return aComponent.configuration;
     }else{
         return null;
     }
 }
 
-function reset(){
-    if(!aSensor){
+function resetComponent (){
+    if(!aComponent){
         return false;
     }
-    aSensor.resetSensorState();
-    return aSensor.getData(true);
+    aComponent.resetState();
+    return aComponent.configuration;
 }
 
 function getData(successfulCallback,errorCallback) {
-    if(!aSensor){
+    if(!aComponent){
         return false;
     }
     requestDataFromSensor(successfulCallback,errorCallback);
@@ -115,8 +130,8 @@ function getData(successfulCallback,errorCallback) {
 }
 
 function requestDataFromSensor(successfulCallback,errorCallback){
-    if(!aSensor){
+    if(!aComponent){
         return false;
     }
-    aSensor.currentTemperature(successfulCallback,errorCallback);
+    aComponent.currentTemperature(successfulCallback,errorCallback);
 }

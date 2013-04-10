@@ -204,7 +204,7 @@ test("properties - with configuration",function(done){
     assert.deepEqual(aTemperatureSensor.getData(true),configInSensor);
 
     // reset everything
-    aTemperatureSensor.resetSensorState(true);
+    aTemperatureSensor.resetState(true);
 
     var aGenericSensor = new GenericComponent();
 

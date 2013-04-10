@@ -40,7 +40,7 @@ function LightActuator (configuration) {
      * you might need to re-config the sensor after reset
      * by calling 'config'
      */
-    self.resetActuatorState = function () {
+    self.resetState = function () {
         self.aGenericComponent = new GenericComponent();
         self.aComponentEvent = new self.aGenericComponent.componentEvent();
         self.configuration = Constant.ComponentSpec.default.config;

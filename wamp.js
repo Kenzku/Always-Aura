@@ -54,7 +54,10 @@ function enableWamp(req, res, next) {
 app.get('/', routes.index);
 app.get('/room',room.show);
 app.get('/test', function(req,res){
-    res.sendfile(__dirname + '/public/test/temperatureSensorTest.html');
+    // test temperature sensor: un-comment the following line
+//    res.sendfile(__dirname + '/public/test/TemperatureSensorTest.html');
+    // test light actuator: un-comment the following line
+    res.sendfile(__dirname + '/public/test/LightActuatorTest.html');
 });
 
 // rpc

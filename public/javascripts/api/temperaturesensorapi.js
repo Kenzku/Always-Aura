@@ -12,7 +12,7 @@
  * @param callback success callback
  * with the returned data as its parameter
  */
-function initSensor(type,config,callback) {
+function initSensor(session,type,config,callback) {
     var args = config && typeof config == 'object' ?
         [type,config] :
         [type];
@@ -20,7 +20,7 @@ function initSensor(type,config,callback) {
     if (callback && typeof callback === 'function'){
         successCB.callback = callback;
     }
-    sess.call('sensor:init',args).then(successCB);
+    session.call('sensor:init',args).then(successCB);
 
     /**
      * RPC success callback
@@ -35,11 +35,11 @@ function initSensor(type,config,callback) {
  * @param callback success callback
  * with the returned data as its parameter
  */
-function resetSensor(callback) {
+function resetSensor(session,callback) {
     if (callback && typeof callback === 'function'){
         successCB.callback = callback;
     }
-    sess.call('sensor:reset').then(successCB);
+    session.call('sensor:reset').then(successCB);
 
     /**
      * RPC success callback
@@ -54,7 +54,7 @@ function resetSensor(callback) {
  * @param callback success callback
  * with the returned data as its parameter
  */
-function getData(successfulCallback,errorCallback) {
+function getData(session,successfulCallback,errorCallback) {
     if (successfulCallback && typeof successfulCallback === 'function'){
         successCB.successfulCallback = successfulCallback;
     }
@@ -62,7 +62,7 @@ function getData(successfulCallback,errorCallback) {
         errorCB.errorCallback = errorCallback;
     }
 
-    sess.call('sensor:getData').then(successCB,errorCB);
+    session.call('sensor:getData').then(successCB,errorCB);
 
     /**
      * RPC success callback
