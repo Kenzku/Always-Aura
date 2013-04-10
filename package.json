@@ -1,0 +1,24 @@
+{
+  "name": "WAMP-Tryout",
+  "version": "0.0.1",
+  "contributors": [
+        {
+            "name": "ken",
+            "email": ""
+        }
+  ],
+  "private": true,
+  "scripts": {
+    "start": "node wamp"
+  },
+  "dependencies": {
+    "express": "3.1.0",
+    "ejs": "*",
+    "ws": "~0.4.25",
+    "debug": "*",
+    "chai": "*",
+    "mocha": "1.8.2",
+    "nano": "3.3.8",
+    "chai": "*"
+  }
+}
