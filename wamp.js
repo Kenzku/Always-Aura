@@ -55,9 +55,9 @@ app.get('/', routes.index);
 app.get('/room',room.show);
 app.get('/test', function(req,res){
     // test temperature sensor: un-comment the following line
-//    res.sendfile(__dirname + '/public/test/TemperatureSensorTest.html');
+    res.sendfile(__dirname + '/public/test/TemperatureSensorTest.html');
     // test light actuator: un-comment the following line
-    res.sendfile(__dirname + '/public/test/LightActuatorTest.html');
+//    res.sendfile(__dirname + '/public/test/LightActuatorTest.html');
 });
 
 // rpc

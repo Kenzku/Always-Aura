@@ -23,7 +23,7 @@ module.exports = function api_module(cfg){
             var args = args.shift();
             var result = initComponent(args);
             // cb (err, successResult);
-            cb(null,result);
+            result ? cb(null,result) : cb(Constant.Error.init.type.UNKNOWN);
         },
         /**
          * reset sensor state
@@ -98,7 +98,7 @@ function whichComponent(args){
             break;
         default :
             /* -- NOT TESTED YET -- */
-            return new GenericSensor();
+            return null;
             break;
     }
 }

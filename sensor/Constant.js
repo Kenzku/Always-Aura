@@ -78,6 +78,11 @@ exports.ComponentSpec = {
 exports.Error = {
     reset : {
         NO_INIT : 'You can\'t initialise, because the sensor hasn\'t been initialised.'
+    },
+    init : {
+        type : {
+            UNKNOWN : 'Unknown component type'
+        }
     }
 }
 

@@ -11,10 +11,11 @@ var sess;
 window.onload = init(successCB, errorCB);
 function successCB (session){
     sess = session;
+    session.prefix("component", "http://localhost" + CONSTANT.PORT + "/component#");
+    session.prefix("sensor", "http://localhost" + CONSTANT.PORT + "/sensor#");
 }
 function errorCB(reason){
     sess = null;
-    throw reason;
 }
 
 module('Temperature Sensor on Client-side');
@@ -44,7 +45,7 @@ asyncTest('init a sensor - without configuration',function(){
     }
 
     setTimeout(function(){
-        initSensor(sess, 'temperature',null,successCB);
+        initComponent(sess, 'temperature',null,successCB);
     },2000);
 
 });
@@ -76,7 +77,7 @@ asyncTest('init a sensor - with configuration',function(){
     }
 
     setTimeout(function(){
-        initSensor(sess, 'temperature',configuration, successCB);
+        initComponent(sess, 'temperature',configuration, successCB);
     },2000);
 });
 
@@ -128,9 +129,9 @@ asyncTest('init a sensor - with configuration - reset sensor',function(){
 
     setTimeout(function(){
         /* init a sensor with configuration */
-        initSensor(sess, 'temperature',configuration);
+        initComponent(sess, 'temperature',configuration);
         /* reset the configuration */
-        resetSensor(sess, successCB);
+        resetComponent(sess, successCB);
     },2000);
 
 });
@@ -170,7 +171,7 @@ asyncTest('get data from temperature sensor - with isInit == null - get currentT
         /* original data before init is tested on the server side */
 
         /* init a sensor with configuration */
-        initSensor(sess, 'temperature',configuration);
+        initComponent(sess, 'temperature',configuration);
         /* get data from the sensor */
         getData(sess, successCB,errorCB);
     },2000);

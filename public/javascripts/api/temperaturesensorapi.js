@@ -5,58 +5,15 @@
  * NOTE: initwamp.js should have been called before hand,
  * so that the WAMP connection has been setup.
  */
-/**
- * initialise a sensor
- * @param type {String} either 'sensor' or 'actuator'
- * @param config {{}}, a JSON object of the configuration
- * @param callback success callback
- * with the returned data as its parameter
- */
-function initSensor(session,type,config,callback) {
-    var args = config && typeof config == 'object' ?
-        [type,config] :
-        [type];
 
-    if (callback && typeof callback === 'function'){
-        successCB.callback = callback;
-    }
-    session.call('sensor:init',args).then(successCB);
-
-    /**
-     * RPC success callback
-     * @param res the data that the server transfer
-     */
-    function successCB (res){
-        successCB.callback(res);
-    }
-}
-/**
- * reset sensor state
- * @param callback success callback
- * with the returned data as its parameter
- */
-function resetSensor(session,callback) {
-    if (callback && typeof callback === 'function'){
-        successCB.callback = callback;
-    }
-    session.call('sensor:reset').then(successCB);
-
-    /**
-     * RPC success callback
-     * @param res the data that the server transfer
-     */
-    function successCB (res){
-        successCB.callback(res);
-    }
-}
 /**
  * get data from a sensor
  * @param callback success callback
  * with the returned data as its parameter
  */
-function getData(session,successfulCallback,errorCallback) {
-    if (successfulCallback && typeof successfulCallback === 'function'){
-        successCB.successfulCallback = successfulCallback;
+function getData(session,successCallback,errorCallback) {
+    if (successCallback && typeof successCallback === 'function'){
+        successCB.successCallback = successCallback;
     }
     if (errorCallback && typeof errorCallback === 'function'){
         errorCB.errorCallback = errorCallback;
@@ -70,7 +27,7 @@ function getData(session,successfulCallback,errorCallback) {
      */
     function successCB (res){
         console.log(res);
-        successCB.successfulCallback(res);
+        successCB.successCallback(res);
     }
     function errorCB (err) {
         console.log(err);

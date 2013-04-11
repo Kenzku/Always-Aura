@@ -9,10 +9,16 @@ var sess;
 window.onload = init(successCB, errorCB);
 function successCB (session){
     sess = session;
+    /**
+     * establish a prefix, so we can abbreviate procedure URIs
+     * component will stand for http://localhost:3000/calc#
+     */
+    session.prefix("component", "http://localhost" + CONSTANT.PORT + "/component#");
+    session.prefix("actuator", "http://localhost" + CONSTANT.PORT + "/actuator#");
+
 }
 function errorCB(reason){
     sess = null;
-    throw reason;
 }
 
 module('Actuator on Client-side');
@@ -44,14 +50,21 @@ asyncTest('init an actuator - without configuration',function(){
         deepEqual(result,OriginalConfiguration);
         start();
     }
+
+    function errorCB (err) {
+        console.log(err);
+        ok();
+        start();
+    }
+
     setTimeout(function(){
-        initActuator(sess,'switch',null,successCB);
+        initComponent(sess,'switch',null,successCB,errorCB);
     },2000);
 });
 
 asyncTest('init an actuator - with configuration',function(){
     var configuration = {
-        componentType: 'temperature',
+        componentType: 'switch',
         deviceID:"12314213432432423154235",
         returnable: false,
         timeout:200.0,
@@ -66,23 +79,33 @@ asyncTest('init an actuator - with configuration',function(){
         vendor:'Huawei',
         version:1.0,
 
-        type : 'sensor',
-        cancelable: true
+        type : 'actuator',
+        cancelable: true,
+
+        switchMode : CONSTANT.COMPONENT_SPEC.DEFAULT.SWITCH_MODE.DIAL,
+        strength : 90
     };
 
     function successCB(result){
-        deepEqual(result,configuration);
+        var configuration_copy = configuration;
+        configuration_copy.strength = 0.9;
+        deepEqual(result,configuration_copy);
+        start();
+    }
+    function errorCB (err) {
+        console.log(err);
+        ok(true);
         start();
     }
 
     setTimeout(function(){
-        initActuator(sess,'temperature',configuration, successCB);
+        initComponent(sess,'switch',configuration, successCB,errorCB);
     },2000);
 });
 
 asyncTest('init an actuator - with configuration - reset actuator',function(){
     var configuration = {
-        componentType: 'temperature',
+        componentType: 'switch',
         deviceID:"12314213432432423154235",
         returnable: false,
         timeout:200.0,
@@ -97,12 +120,12 @@ asyncTest('init an actuator - with configuration - reset actuator',function(){
         vendor:'Huawei',
         version:1.0,
 
-        type : 'sensor',
+        type : 'actuator',
         cancelable: true
     };
 
     var OriginalConfiguration = {
-        componentType: "temperature",
+        componentType: "switch",
         deviceID: "",
         returnable: true,
         timeout: 100.0,
@@ -116,8 +139,11 @@ asyncTest('init an actuator - with configuration - reset actuator',function(){
         vendor : null,
         version : null,
 
-        type : 'sensor',
-        cancelable: false
+        type : 'actuator',
+        cancelable: false,
+
+        switchMode : CONSTANT.COMPONENT_SPEC.DEFAULT.SWITCH_MODE.ON_OFF,
+        strength : CONSTANT.COMPONENT_SPEC.DEFAULT.SWITCH.OFF
 
     };
 
@@ -128,9 +154,9 @@ asyncTest('init an actuator - with configuration - reset actuator',function(){
 
     setTimeout(function(){
         /* init a sensor with configuration */
-        initActuator(sess,'temperature',configuration);
+        initComponent(sess,'switch',configuration);
         /* reset the configuration */
-        resetActuator(sess, successCB);
+        resetComponent(sess, successCB);
     },2000);
 
 });
