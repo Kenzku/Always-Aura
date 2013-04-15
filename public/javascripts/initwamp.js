@@ -3,6 +3,9 @@
  * Date: 10/04/2013
  * Time: 11:39
  */
+define(['../javascripts/autobahn.js'],function(ab){
+    return init;
+});
 function init (successCallback, errorCallback){
     var PORT = "3000";
 

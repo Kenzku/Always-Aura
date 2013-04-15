@@ -3,7 +3,9 @@
  * Date: 10/04/2013
  * Time: 11:52
  */
-
+define(['../javascripts/api/lightactuatorapi.js','../javascripts/initwamp.js'], function(LightActuatorAPI,init){
+   return Room;
+});
 function Room() {
     var self = this;
 
@@ -37,20 +39,9 @@ function Room() {
         // make an RPC to check
     }
 
+    // the room can turn on the light, because it has a switch
     self.switchLight = function (onSwitchedLight, successCallback, errorCallback){
-        if (onSwitchedLight && typeof onSwitchedLight === 'function'){
-            subscribe(onSwitchedLight);
-        }else{
-            subscribe();
-        }
-
-        function subscribe(onSwitchedLight){
-            if (onSwitchedLight){
-                self.sess.subscribe("room:switchLight", onSwitchedLight);
-            }else{
-                self.sess.subscribe("room:switchLight");
-            }
-
-        }
+        var aLightActuatorAPI = new LightActuatorAPI();
+        aLightActuatorAPI.switchLight(self.sess, onSwitchedLight, successCallback, errorCallback);
     }
 }
