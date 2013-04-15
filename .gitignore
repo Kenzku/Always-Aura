@@ -16,4 +16,4 @@ config.json
 .idea/
 WAMP-Server/vendor/
 WAMP-Server/.idea/
-mirror.*
+mirror*

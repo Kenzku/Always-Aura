@@ -5,6 +5,7 @@
  */
 var GenericComponent = require('./GenericComponentAPI');
 var Constant = require('../sensor/Constant');
+var CouchDB = require('../db/CouchDB');
 
 function LightActuator (configuration) {
     var self = this;
@@ -25,14 +26,64 @@ function LightActuator (configuration) {
      */
     self.strength = Constant.ComponentSpec.default.switch.off;
 
-    self.switchLight = function (successfulCallback,errorCallback){
+    self.checkLightState = function (roomId, successCallback,errorCallback){
+        if (!roomId){throw err};
         /* NEED TO CHANGE - sCB and eCB will be both called */
-        if (successfulCallback && typeof successfulCallback === 'function'){
-            successfulCallback();
-        }
-        if (errorCallback && typeof errorCallback === 'function'){
-            errorCallback();
-        }
+        var aCouchDB = new CouchDB('room');
+        aCouchDB.readDocument(roomId,
+            // success CB
+            function(body){
+                if (successCallback && typeof successCallback === 'function'){
+                    var data;
+                    if(!body.data) {
+                        data = Constant.room.isLightOn;
+                    }else{
+                        data = body.data.isLightOn ? body.data.isLightOn : Constant.room.isLightOn;
+                    }
+                    self.aComponentEvent.returnValue = data;
+                    self.strength = data;
+                    successCallback(data);
+                }
+            },
+            // error CB
+            function(err){
+                if (errorCallback && typeof errorCallback === 'function'){
+                    errorCallback(err);
+                }
+            });
+    }
+
+    self.switchLight = function (roomId, successCallback,errorCallback){
+        if (!roomId || typeof roomId === 'function'){
+            if (errorCallback && typeof errorCallback === 'function'){
+                errorCallback('no room id');
+            }else{
+                throw 'no room id';
+            }
+        };
+        /* NEED TO CHANGE - sCB and eCB will be both called */
+        var aCouchDB = new CouchDB('room');
+        aCouchDB.readDocument(roomId,
+            // success CB
+            function(body){
+                if (successCallback && typeof successCallback === 'function'){
+                    var data;
+                    if(!body.data) {
+                        data = Constant.room.isLightOn;
+                    }else{
+                        data = body.data.isLightOn ? body.data.isLightOn : Constant.room.isLightOn;
+                    }
+                    self.aComponentEvent.returnValue = data;
+                    self.strength = data;
+                    successCallback(data);
+                }
+            },
+            // error CB
+            function(err){
+                if (errorCallback && typeof errorCallback === 'function'){
+                    errorCallback(err);
+                }
+            });
     }
 
     /**

@@ -28,7 +28,7 @@ function TemperatureSensor(configuration) {
      */
     self.updateTemperatureOnSensor = function (successfulCallback,errorCallback) {
         /* Need To Do - currently testing on one sample data */
-        var aCouchDB = new CouchDB();
+        var aCouchDB = new CouchDB('saku_snabb');
         aCouchDB.readDocument(self.aGenericComponent.deviceID,
             // success CB
             function(body){

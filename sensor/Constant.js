@@ -29,6 +29,14 @@ exports.State = {
     original : 0
 }
 
+exports.room = {
+    isLightOn : 'off',
+    topURI : 'room:switchLight',
+    subscribe : {
+        comeIn : 'in the room'
+    }
+}
+
 exports.ComponentSpec = {
     default : {
         data: null,

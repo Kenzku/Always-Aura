@@ -13,8 +13,8 @@ function successCB (session){
      * establish a prefix, so we can abbreviate procedure URIs
      * component will stand for http://localhost:3000/calc#
      */
-    session.prefix("component", "http://localhost" + CONSTANT.PORT + "/component#");
-    session.prefix("actuator", "http://localhost" + CONSTANT.PORT + "/actuator#");
+    session.prefix("component", "http://"+CONSTANT.DOMAIN + ":" + CONSTANT.PORT + "/component#");
+    session.prefix("actuator", "http://"+CONSTANT.DOMAIN + ":" +CONSTANT.PORT + "/actuator#");
 
 }
 function errorCB(reason){

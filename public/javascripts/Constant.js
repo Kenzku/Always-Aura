@@ -6,6 +6,7 @@
 
 var CONSTANT = {
     PORT : 3000,
+    DOMAIN : 'localhost',
 
     WAMP : {
         SESSION : {

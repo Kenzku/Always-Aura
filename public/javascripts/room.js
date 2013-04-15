@@ -9,16 +9,14 @@ function Room() {
 
     self.sess = CONSTANT.WAMP.SESSION.DEFAULT;
 
-    self.comeIn = function comeIn(successCallback,errorCallback) {
+    self.comeIn = function (successCallback,errorCallback) {
         // init WAMP connection
         init(successCB,errorCB);
 
         // call on WAMP connection successfully establish
         function successCB(session){
             self.sess = session;
-            // establish a prefix, so we can abbreviate procedure URIs.
-            self.sess.prefix("actuator", "http://localhost" + CONSTANT.PORT + "/actuator#");
-
+            self.sess.prefix("room", "http://"+CONSTANT.DOMAIN + ":" + CONSTANT.PORT +  "/room#");
             if (successCallback && typeof successCallback === 'function'){
                 successCallback(self.sess);
             }
@@ -29,12 +27,30 @@ function Room() {
             if (errorCallback && typeof errorCallback === 'function'){
                 errorCallback(error);
             }else{
-                throw error;
+//                throw error;
             }
         }
+
     }
 
-    self.switchLightOn = function (successCallback,errorCallback){
+    self.lightStatus = function (successCallback, errorCallback){
+        // make an RPC to check
+    }
 
+    self.switchLight = function (onSwitchedLight, successCallback, errorCallback){
+        if (onSwitchedLight && typeof onSwitchedLight === 'function'){
+            subscribe(onSwitchedLight);
+        }else{
+            subscribe();
+        }
+
+        function subscribe(onSwitchedLight){
+            if (onSwitchedLight){
+                self.sess.subscribe("room:switchLight", onSwitchedLight);
+            }else{
+                self.sess.subscribe("room:switchLight");
+            }
+
+        }
     }
 }

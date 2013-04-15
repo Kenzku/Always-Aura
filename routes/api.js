@@ -5,11 +5,11 @@
  */
 var TemperatureSensor = require('../sensor/TemperatureSensorAPI');
 var LightActuator = require('../sensor/LightActuatorAPI');
-var GenericSensor = require('../sensor/GenericComponentAPI');
 var Constant = require('../sensor/Constant');
+var ClientInRoom = require('../sensor/ClientInRoom');
 
-// temperature sensor
 var aComponent;
+var aClientInRoom;
 
 module.exports = function api_module(cfg){
     // procedures
@@ -36,6 +36,15 @@ module.exports = function api_module(cfg){
         },
         'sensor:getData' : function(args,cb) {
             getData(successCB,errorCB);
+            function successCB(data){
+                cb(null,data);
+            }
+            function errorCB(err){
+                cb(err);
+            }
+        },
+        'actuator:switchLight' : function(args,cb){
+            switchLight(successCB,errorCB);
             function successCB(data){
                 cb(null,data);
             }
@@ -134,4 +143,14 @@ function requestDataFromSensor(successfulCallback,errorCallback){
         return false;
     }
     aComponent.currentTemperature(successfulCallback,errorCallback);
+}
+
+function switchLight(successfulCallback,errorCallback){
+    if(!aComponent){
+        return false;
+    }
+    if(!aClientInRoom) {
+        aClientInRoom = ClientInRoom();
+    }
+    aComponent.checkLightState(successfulCallback,errorCallback);
 }

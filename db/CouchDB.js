@@ -5,8 +5,8 @@
  */
 var nano = require('nano')('http://iot.cs.hut.fi:5984');
 
-function CouchDB () {
-    var db = nano.use('saku_snabb');
+function CouchDB (database) {
+    var db = nano.use(database);
     var self = this;
 
     self.readDocument = function (id,successfulCallback,errorCallback) {

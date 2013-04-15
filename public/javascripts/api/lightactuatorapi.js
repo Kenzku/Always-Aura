@@ -4,40 +4,26 @@
  * Time: 14:52
  */
 //
-//function initActuator(session,type,config,callback) {
-//    var args = config && typeof config == 'object' ?
-//        [type,config] :
-//        [type];
-//
-//    if (callback && typeof callback === 'function'){
-//        successCB.callback = callback;
-//    }
-//    session.call('component:init',args).then(successCB);
-//
-//    /**
-//     * RPC success callback
-//     * @param res the data that the server transfer
-//     */
-//    function successCB (res){
-//        successCB.callback(res);
-//    }
-//}
-///**
-// * reset sensor state
-// * @param callback success callback
-// * with the returned data as its parameter
-// */
-//function resetActuator(session,callback) {
-//    if (callback && typeof callback === 'function'){
-//        successCB.callback = callback;
-//    }
-//    session.call('component:reset').then(successCB);
-//
-//    /**
-//     * RPC success callback
-//     * @param res the data that the server transfer
-//     */
-//    function successCB (res){
-//        successCB.callback(res);
-//    }
-//}
+function switchLight(session,successCallback,errorCallback) {
+    if (successCallback && typeof successCallback === 'function'){
+        successCB.successCallback = successCallback;
+    }
+    if (errorCallback && typeof errorCallback === 'function'){
+        errorCB.errorCallback = errorCallback;
+    }
+
+    session.call('actuator:switchLight').then(successCB,errorCB);
+
+    /**
+     * RPC success callback
+     * @param res the data that the server transfer
+     */
+    function successCB (res){
+        console.log(res);
+        successCB.successCallback(res);
+    }
+    function errorCB (err) {
+        console.log(err);
+        errorCB.errorCallback(err);
+    }
+}

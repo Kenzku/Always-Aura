@@ -245,17 +245,49 @@ test("properties - with configuration",function(done){
     /* callback function's behaviour */
     expect(aLightActuator.aComponentEvent.callback).to.be.a('function');
     /* callback function on Generic Sensor API - on the sensor */
-    var result = aLightActuator.aComponentEvent.callback(successCB_1);
+    var result = aLightActuator.aComponentEvent.callback('8361e3dfb52f0e28784c3cb534010c8f',successCB_1,errorCB_1);
     /* doAction on Generic Sensor API - on the sensor */
-    var result = aLightActuator.switchLight(successCB_2);
+    var result = aLightActuator.switchLight('8361e3dfb52f0e28784c3cb534010c8f',successCB_2,errorCB_2);
 
     function successCB_1(result){
         assert.ok(true);
-        console.log("1");
+    }
+    function errorCB_1(err){
+        console.log("Error 1: " + err);
+        // I would like the test stop
+        assert.ok(false);
     }
     function successCB_2(result){
         assert.ok(true);
-        console.log("2");
+        done();
+    }
+    function errorCB_2(err){
+        console.log("Error 2: " + err);
+        // I would like the test stop
+        assert.ok(false);s
+        done();
+    }
+});
+
+//mocha ./test/LightActuatorAPITest.js -R spec -u qunit -g switchLight -t 6000
+test('switch light - switchLight()',function(done){
+    var configuration = {
+        componentType:"switch", // this should not have been changed
+
+        type : 'actuator',
+        cancelable: Constant.CancelAble.true
+    }
+
+    var aLightActuator = new LightActuator(configuration);
+
+    aLightActuator.switchLight('8361e3dfb52f0e28784c3cb534010c8f',successCB,errorCB);
+
+    function successCB(result){
+        done();
+    }
+
+    function errorCB(err){
+        assert.ok(true);
         done();
     }
 });
