@@ -45,10 +45,9 @@ function Room() {
             if (errorCallback && typeof errorCallback === 'function'){
                 errorCallback(error);
             }else{
-//                throw error;
+                throw error;
             }
         }
-
     }
 
     self.lightStatus = function (successCallback, errorCallback){
@@ -64,6 +63,11 @@ function Room() {
      */
     self.switchLight = function (onSwitchedLight, successCallback, errorCallback){
         var aLightActuatorAPI = new LightActuatorAPI();
-        aLightActuatorAPI.switchLight(self.sess, onSwitchedLight, successCallback, errorCallback);
+        aLightActuatorAPI.switchLight(self.sess, onSwitchedLight, rpcSuccessCB, errorCallback);
+
+        function rpcSuccessCB (data) {
+            console.log("I am switching the light!");
+            self.sess.publish("room:lightStatus",{'turnLightTo': data});
+        }
     }
 }

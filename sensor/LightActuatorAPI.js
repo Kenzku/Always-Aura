@@ -6,6 +6,7 @@
 var GenericComponent = require('./GenericComponentAPI');
 var Constant = require('../sensor/Constant');
 var CouchDB = require('../db/CouchDB');
+var Light = require('../sensor/Light');
 
 function LightActuator (configuration) {
     var self = this;
@@ -26,40 +27,15 @@ function LightActuator (configuration) {
      */
     self.strength = Constant.ComponentSpec.default.switch.off;
 
-    self.checkLightState = function (roomId, successCallback,errorCallback){
-        if (!roomId || typeof roomId === 'function'){
-            if (errorCallback && typeof errorCallback === 'function'){
-                errorCallback(Constant.Error.LightActuator.room);
-            }else{
-                throw Constant.Error.LightActuator.room;
-            }
-        }
-        var aCouchDB = new CouchDB('room');
-        aCouchDB.readDocument(Constant.room.id, successCB, errorCallback);
-
-        // success callback to aCouchDB.readDocument
-        function successCB (body){
-            if (body && body.hasOwnProperty('isLightOn')){
-                if(successCallback && typeof successCallback === 'function' ){
-                    successCallback(body.isLightOn);
-                }
-            }else{
-                if (errorCallback && typeof errorCallback === 'function'){
-                    errorCallback(Constant.Error.CouchDB.read);
-                }else{
-                    throw (Constant.Error.CouchDB.read);
-                }
-            }
-        }
-    }
     /**
      * switch the light
-     * @param roomId the id of the room
+     * @param roomId {String} the id of the room
      * @param successCallback (newLightStatus)
      * @param errorCallback (error)
      */
     self.switchLight = function (roomId, successCallback,errorCallback){
         var aCouchDB = new CouchDB('room');
+        var aLight = new Light();
         if (!roomId || typeof roomId === 'function'){
             if (errorCallback && typeof errorCallback === 'function'){
                 errorCallback(Constant.Error.LightActuator.room);
@@ -67,7 +43,7 @@ function LightActuator (configuration) {
                 throw Constant.Error.LightActuator.room;
             }
         }
-        self.checkLightState(roomId,successCB, errorCallback);
+        aLight.checkLightState(roomId,successCB, errorCallback);
 
         // success callback to aCouchDB.readDocument
         function successCB (lightStatus){
@@ -182,3 +158,4 @@ function LightActuator (configuration) {
     })();
 }
 module.exports = LightActuator;
+

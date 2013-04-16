@@ -40,8 +40,9 @@ define(['../../javascripts/room.js','../../javascripts/Constant.js'],function (R
                     // switch light callback
                     function rpcSuccessCB_2 (data){
                         console.log("rpcSuccessCB_2: " + data);
+//                        room.sess.subscribe("room:lightStatus", successCB_3, {'turnLightTo': data});
                         ok(true);
-                        start();
+//                        start();
                     }
 
                     function errorCB_2 (err) {
@@ -50,11 +51,18 @@ define(['../../javascripts/room.js','../../javascripts/Constant.js'],function (R
                         start();
                     }
 
-                    function onSwitchedLight(topicUri, data) {
-                        console.log("onSwitchedLight:" + data);
-                        console.log("onSwitchedLight" + topicUri);
+                    function successCB_3 (topicUri, data){
+                        console.log("successCB_3: " + data);
+                        console.log("successCB_3: " + topicUri);
                         ok(true);
-//                        start();
+                        start();
+                    }
+
+                    function onSwitchedLight(topicUri, data) {
+                        console.log("onSwitchedLight: " + data);
+                        console.log("onSwitchedLight: " + topicUri);
+                        ok(true);
+                        start();
                     }
 
                     var room = new Room();

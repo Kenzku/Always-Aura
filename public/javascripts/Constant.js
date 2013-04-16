@@ -51,6 +51,12 @@ define(function(){
                    SWITCH : 'switch'
                }
            }
+       },
+
+       ERROR : {
+           LIGHT : {
+               LIGHT_STATUS : 'Haven\'t init the light'
+           }
        }
    };
 });

@@ -6,10 +6,9 @@
 var TemperatureSensor = require('../sensor/TemperatureSensorAPI');
 var LightActuator = require('../sensor/LightActuatorAPI');
 var Constant = require('../sensor/Constant');
-var ClientInRoom = require('../sensor/ClientInRoom');
+var Light = require('../sensor/Light');
 
 var aComponent;
-var aClientInRoom;
 
 module.exports = function api_module(cfg){
     // procedures
@@ -45,6 +44,18 @@ module.exports = function api_module(cfg){
         },
         'actuator:switchLight' : function(args,cb){
             var result = switchLight(successCB,errorCB);
+            if (result == false){
+                cb(Constant.Error.reset.NO_INIT);
+            }
+            function successCB(data){
+                cb(null,data);
+            }
+            function errorCB(err){
+                cb(err);
+            }
+        },
+        'room:LightStatus' : function(args,cb){
+            var result = LightStatus(successCB,errorCB);
             if (result == false){
                 cb(Constant.Error.reset.NO_INIT);
             }
@@ -152,8 +163,10 @@ function switchLight(successCallback,errorCallback){
     if(!aComponent){
         return false;
     }
-    console.log("I am in api.js");
-    console.log(aComponent);
     aComponent.switchLight(Constant.room.id, successCallback, errorCallback);
-//    aComponent.checkLightState(successCallback,errorCallback);
+}
+
+function LightStatus(successCallback,errorCallback){
+    var aLight = new Light();
+    aLight.checkLightState(Constant.room.id, successCallback,errorCallback);
 }

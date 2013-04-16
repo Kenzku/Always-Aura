@@ -17,5 +17,12 @@ function LightActuatorAPI () {
             session.subscribe("room:lightStatus", onSwitchedLight);
         }
     }
+
+    self.lightStatus = function (session, rpcSuccessCallback, rpcErrorCallback){
+        session.call('room:LightStatus').then(rpcSuccessCallback,rpcErrorCallback);
+    }
+
+
+
 }
 

@@ -62,6 +62,7 @@ app.get('/test', function(req,res){
 //    res.sendfile(__dirname + '/public/test/LightActuatorTest.html');
     // test room: un-comment the following line
     res.sendfile(__dirname + '/public/test/roomTest.html');
+//    res.sendfile(__dirname + '/public/test/lightTest.html');
 });
 
 // rpc
