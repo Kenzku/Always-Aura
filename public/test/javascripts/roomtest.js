@@ -24,7 +24,7 @@ define(['../../javascripts/room.js','../../javascripts/Constant.js'],function (R
                     room.comeIn(successCB,errorCB);
                 });
 
-                asyncTest('Switch the Light',function(){
+                asyncTest('Switch the Light',3, function(){
                     // enter the room callbacks
                     function successCB_1 (sess){
                         ok(true);
@@ -33,25 +33,27 @@ define(['../../javascripts/room.js','../../javascripts/Constant.js'],function (R
 
                     function errorCB_1 (err) {
                         console.log(err);
-                        ok(true);
+                        ok(false);
                         start();
                     }
 
                     // switch light callback
                     function successCB_2 (data){
+                        console.log(data);
                         ok(true);
                         start();
                     }
 
                     function errorCB_2 (err) {
                         console.log(err);
-                        ok(true);
+                        ok(false);
                         start();
                     }
 
                     function onSwitchedLight(topicUri, data) {
                         console.log(data);
                         console.log(topicUri);
+                        ok(true);
                         start();
                     }
 

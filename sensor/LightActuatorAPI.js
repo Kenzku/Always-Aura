@@ -67,11 +67,22 @@ function LightActuator (configuration) {
             // success CB
             function(body){
                 if (successCallback && typeof successCallback === 'function'){
-                    var data;
-                    if(!body.data) {
-                        data = Constant.room.isLightOn;
+                    var data = {
+                        before : Constant.room.isLightOn,
+                        now : Constant.room.isLightOn
+                    };
+                    if(!body.data || !body.data.isLightOn) {
+                        if (errorCallback && typeof errorCallback === 'function'){
+                            errorCallback("Database failed: No Data!");
+                        }else{
+                            throw "Database failed: No Data!";
+                        }
                     }else{
-                        data = body.data.isLightOn ? body.data.isLightOn : Constant.room.isLightOn;
+                        data = {
+                            before : body.data.isLightOn,
+                            now : !body.data.isLightOn
+                        };
+
                     }
                     self.aComponentEvent.returnValue = data;
                     self.strength = data;

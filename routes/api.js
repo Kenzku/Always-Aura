@@ -129,28 +129,29 @@ function resetComponent (){
     return aComponent.configuration;
 }
 
-function getData(successfulCallback,errorCallback) {
+function getData(successCallback,errorCallback) {
     if(!aComponent){
         return false;
     }
-    requestDataFromSensor(successfulCallback,errorCallback);
+    requestDataFromSensor(successCallback,errorCallback);
     // return true does not mean that it is successful to retrieve data
     return true;
 }
 
-function requestDataFromSensor(successfulCallback,errorCallback){
+function requestDataFromSensor(successCallback,errorCallback){
     if(!aComponent){
         return false;
     }
-    aComponent.currentTemperature(successfulCallback,errorCallback);
+    aComponent.currentTemperature(successCallback,errorCallback);
 }
 
-function switchLight(successfulCallback,errorCallback){
+function switchLight(successCallback,errorCallback){
     if(!aComponent){
         return false;
     }
     if(!aClientInRoom) {
         aClientInRoom = ClientInRoom();
     }
-    aComponent.checkLightState(successfulCallback,errorCallback);
+    aComponent.switchLight(Constant.room.id, successCallback,errorCallback)
+//    aComponent.checkLightState(successCallback,errorCallback);
 }

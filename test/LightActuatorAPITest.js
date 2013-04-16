@@ -245,9 +245,9 @@ test("properties - with configuration",function(done){
     /* callback function's behaviour */
     expect(aLightActuator.aComponentEvent.callback).to.be.a('function');
     /* callback function on Generic Sensor API - on the sensor */
-    var result = aLightActuator.aComponentEvent.callback('8361e3dfb52f0e28784c3cb534010c8f',successCB_1,errorCB_1);
+    var result = aLightActuator.aComponentEvent.callback(Constant.room.id,successCB_1,errorCB_1);
     /* doAction on Generic Sensor API - on the sensor */
-    var result = aLightActuator.switchLight('8361e3dfb52f0e28784c3cb534010c8f',successCB_2,errorCB_2);
+    var result = aLightActuator.switchLight(Constant.room.id,successCB_2,errorCB_2);
 
     function successCB_1(result){
         assert.ok(true);
@@ -280,9 +280,10 @@ test('switch light - switchLight()',function(done){
 
     var aLightActuator = new LightActuator(configuration);
 
-    aLightActuator.switchLight('8361e3dfb52f0e28784c3cb534010c8f',successCB,errorCB);
+    aLightActuator.switchLight(Constant.room.id,successCB,errorCB);
 
     function successCB(result){
+        console.log(result);
         done();
     }
 

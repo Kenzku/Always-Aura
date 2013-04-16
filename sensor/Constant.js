@@ -30,7 +30,8 @@ exports.State = {
 }
 
 exports.room = {
-    isLightOn : 'off',
+    id : '8361e3dfb52f0e28784c3cb534010c8f',
+    isLightOn : null,
     topURI : 'room:switchLight',
     subscribe : {
         comeIn : 'in the room'
@@ -91,6 +92,11 @@ exports.Error = {
         type : {
             UNKNOWN : 'Unknown component type'
         }
+    },
+    CouchDB : {
+        read : 'read document error',
+        update : 'update document error',
+        save : 'save document error'
     }
 }
 
