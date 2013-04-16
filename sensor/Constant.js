@@ -32,9 +32,11 @@ exports.State = {
 exports.room = {
     id : '8361e3dfb52f0e28784c3cb534010c8f',
     isLightOn : null,
-    topURI : 'room:switchLight',
+    topURI : {
+        lightStatus : 'room:light'
+    },
     subscribe : {
-        comeIn : 'in the room'
+        lightStatus : 'Subscribe Light Status'
     }
 }
 
@@ -97,6 +99,9 @@ exports.Error = {
         read : 'read document error',
         update : 'update document error',
         save : 'save document error'
+    },
+    LightActuator : {
+        room : 'no room id'
     }
 }
 

@@ -27,74 +27,56 @@ function LightActuator (configuration) {
     self.strength = Constant.ComponentSpec.default.switch.off;
 
     self.checkLightState = function (roomId, successCallback,errorCallback){
-        if (!roomId){throw err};
-        /* NEED TO CHANGE - sCB and eCB will be both called */
-        var aCouchDB = new CouchDB('room');
-        aCouchDB.readDocument(roomId,
-            // success CB
-            function(body){
-                if (successCallback && typeof successCallback === 'function'){
-                    var data;
-                    if(!body.data) {
-                        data = Constant.room.isLightOn;
-                    }else{
-                        data = body.data.isLightOn ? body.data.isLightOn : Constant.room.isLightOn;
-                    }
-                    self.aComponentEvent.returnValue = data;
-                    self.strength = data;
-                    successCallback(data);
-                }
-            },
-            // error CB
-            function(err){
-                if (errorCallback && typeof errorCallback === 'function'){
-                    errorCallback(err);
-                }
-            });
-    }
-
-    self.switchLight = function (roomId, successCallback,errorCallback){
         if (!roomId || typeof roomId === 'function'){
             if (errorCallback && typeof errorCallback === 'function'){
-                errorCallback('no room id');
+                errorCallback(Constant.Error.LightActuator.room);
             }else{
-                throw 'no room id';
+                throw Constant.Error.LightActuator.room;
             }
-        };
-        /* NEED TO CHANGE - sCB and eCB will be both called */
+        }
         var aCouchDB = new CouchDB('room');
-        aCouchDB.readDocument(roomId,
-            // success CB
-            function(body){
-                if (successCallback && typeof successCallback === 'function'){
-                    var data = {
-                        before : Constant.room.isLightOn,
-                        now : Constant.room.isLightOn
-                    };
-                    if(!body.data || !body.data.isLightOn) {
-                        if (errorCallback && typeof errorCallback === 'function'){
-                            errorCallback("Database failed: No Data!");
-                        }else{
-                            throw "Database failed: No Data!";
-                        }
-                    }else{
-                        data = {
-                            before : body.data.isLightOn,
-                            now : !body.data.isLightOn
-                        };
+        aCouchDB.readDocument(Constant.room.id, successCB, errorCallback);
 
-                    }
-                    self.aComponentEvent.returnValue = data;
-                    self.strength = data;
-                    successCallback(data);
+        // success callback to aCouchDB.readDocument
+        function successCB (body){
+            if (body && body.hasOwnProperty('isLightOn')){
+                if(successCallback && typeof successCallback === 'function' ){
+                    successCallback(body.isLightOn);
                 }
-            },
-            // error CB
-            function(err){
+            }else{
                 if (errorCallback && typeof errorCallback === 'function'){
-                    errorCallback(err);
+                    errorCallback(Constant.Error.CouchDB.read);
+                }else{
+                    throw (Constant.Error.CouchDB.read);
                 }
-            });
+            }
+        }
+    }
+    /**
+     * switch the light
+     * @param roomId the id of the room
+     * @param successCallback (newLightStatus)
+     * @param errorCallback (error)
+     */
+    self.switchLight = function (roomId, successCallback,errorCallback){
+        var aCouchDB = new CouchDB('room');
+        if (!roomId || typeof roomId === 'function'){
+            if (errorCallback && typeof errorCallback === 'function'){
+                errorCallback(Constant.Error.LightActuator.room);
+            }else{
+                throw Constant.Error.LightActuator.room;
+            }
+        }
+        self.checkLightState(roomId,successCB, errorCallback);
+
+        // success callback to aCouchDB.readDocument
+        function successCB (lightStatus){
+            aCouchDB.updateDocument(Constant.room.id,'isLightOn',{isLightOn:!lightStatus},null, errorCallback);
+            if (successCallback && typeof successCallback === 'function'){
+                // the new status: !lightStatus
+                successCallback(!lightStatus);
+            }
+        }
     }
 
     /**

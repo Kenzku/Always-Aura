@@ -4,13 +4,14 @@
  * Time: 10:28
  */
 define(function(){
-   return
+   return ComponentAPI;
 });
 
 function ComponentAPI(){
     var self = this;
     /**
      * initialise a sensor
+     * @param session {Object} WAMP session
      * @param type {String} 'temperature' or 'switch'
      * @param config {{}}, a JSON object of the configuration
      * @param successCallback success callback
@@ -22,42 +23,15 @@ function ComponentAPI(){
             [type,config] :
             [type];
 
-        if (successCallback && typeof successCallback === 'function'){
-            successCB.callback = successCallback;
-        }
-        if (errorCallback && typeof errorCallback === 'function'){
-            errorCB.callback = errorCallback;
-        }
-        session.call('component:init',args).then(successCB,errorCB);
-
-        /**
-         * RPC success callback
-         * @param res the data that the server transfer
-         */
-        function successCB (res){
-            successCB.callback(res);
-        }
-        function errorCB (err){
-            errorCB.callback(err);
-        }
+        session.call('component:init',args).then(successCallback,errorCallback);
     }
     /**
      * reset sensor state
-     * @param callback success callback
+     * @param session {Object} WAMP session
+     * @param successCallback success callback
      * with the returned data as its parameter
      */
-    self.resetComponent = function (session,callback) {
-        if (callback && typeof callback === 'function'){
-            successCB.callback = callback;
-        }
+    self.resetComponent = function (session,successCallback) {
         session.call('component:reset').then(successCB);
-
-        /**
-         * RPC success callback
-         * @param res the data that the server transfer
-         */
-        function successCB (res){
-            successCB.callback(res);
-        }
     }
 }

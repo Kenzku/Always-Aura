@@ -44,7 +44,10 @@ module.exports = function api_module(cfg){
             }
         },
         'actuator:switchLight' : function(args,cb){
-            switchLight(successCB,errorCB);
+            var result = switchLight(successCB,errorCB);
+            if (result == false){
+                cb(Constant.Error.reset.NO_INIT);
+            }
             function successCB(data){
                 cb(null,data);
             }
@@ -149,9 +152,8 @@ function switchLight(successCallback,errorCallback){
     if(!aComponent){
         return false;
     }
-    if(!aClientInRoom) {
-        aClientInRoom = ClientInRoom();
-    }
-    aComponent.switchLight(Constant.room.id, successCallback,errorCallback)
+    console.log("I am in api.js");
+    console.log(aComponent);
+    aComponent.switchLight(Constant.room.id, successCallback, errorCallback);
 //    aComponent.checkLightState(successCallback,errorCallback);
 }

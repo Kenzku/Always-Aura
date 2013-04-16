@@ -271,24 +271,17 @@ test("properties - with configuration",function(done){
 
 //mocha ./test/LightActuatorAPITest.js -R spec -u qunit -g switchLight -t 6000
 test('switch light - switchLight()',function(done){
-    var configuration = {
-        componentType:"switch", // this should not have been changed
-
-        type : 'actuator',
-        cancelable: Constant.CancelAble.true
-    }
-
-    var aLightActuator = new LightActuator(configuration);
+    var aLightActuator = new LightActuator();
 
     aLightActuator.switchLight(Constant.room.id,successCB,errorCB);
 
     function successCB(result){
-        console.log(result);
+        assert.ok(true);
         done();
     }
 
     function errorCB(err){
-        assert.ok(true);
+        assert.ok(false,err);
         done();
     }
 });

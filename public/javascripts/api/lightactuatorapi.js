@@ -10,29 +10,11 @@ define(function(){
 function LightActuatorAPI () {
     var self = this;
 
-    self.switchLight = function (session,onSwitchedLight,successCallback,errorCallback) {
-        if (successCallback && typeof successCallback === 'function'){
-            successCB.successCallback = successCallback;
-        }
-        if (errorCallback && typeof errorCallback === 'function'){
-            errorCB.errorCallback = errorCallback;
-        }
+    self.switchLight = function (session,onSwitchedLight,rpcSuccessCallback,rpcErrorCallback) {
+        session.call('actuator:switchLight').then(rpcSuccessCallback,rpcErrorCallback);
 
-        session.call('actuator:switchLight').then(successCB,errorCB);
         if (onSwitchedLight && typeof onSwitchedLight === 'function'){
-            session.subscribe("room:light", onSwitchedLight);
-        }
-        /**
-         * RPC success callback
-         * @param res the data that the server transfer
-         */
-        function successCB (res){
-            console.log(res);
-            successCB.successCallback(res);
-        }
-        function errorCB (err) {
-            console.log(err);
-            errorCB.errorCallback(err);
+            session.subscribe("room:lightStatus", onSwitchedLight);
         }
     }
 }

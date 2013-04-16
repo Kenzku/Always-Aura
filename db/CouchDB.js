@@ -9,7 +9,12 @@ var Constant = require('../sensor/Constant');
 function CouchDB (database) {
     var db = nano.use(database);
     var self = this;
-
+    /**
+     * read documents from couchDB
+     * @param id {String} document id
+     * @param successCallback(body), called when read succeed
+     * @param errorCallback(error), called when read error
+     */
     self.readDocument = function (id,successCallback,errorCallback) {
         db.get(id, function(err, body) {
             if (err) {
@@ -26,12 +31,22 @@ function CouchDB (database) {
             }
         });
     }
-
-    self.updateDocument = function(id, field, doc, successCallback_1,errorCallback_1) {
-        self.readDocument(id,successCallback_2,errorCallback_2);
+    /**
+     * update a filed of the document given by id, or
+     * update the old document to the given document, by id, which means
+     * it only updates those fields in the given documents
+     * @param id {String} document id
+     * @param field {String} one field in document to be updated.
+     * if field appears, it only update this field
+     * @param doc {Object} new document to be updated
+     * @param successCallback(body)
+     * @param errorCallback(err)
+     */
+    self.updateDocument = function(id, field, doc, successCallback,errorCallback) {
+        self.readDocument(id,successCallback_1,errorCallback);
 
         // success for read document
-        function successCallback_2(body){
+        function successCallback_1(body){
             var newDoc = body;
             if (field){
                 if (doc.hasOwnProperty(field)) {
@@ -44,19 +59,15 @@ function CouchDB (database) {
                     }
                 }
             }
-            self.saveDocument(newDoc, successCallback_1,errorCallback_1);
-        }
-
-        // error for read document
-        function errorCallback_2 (err){
-            if (errorCallback_2 && typeof errorCallback_2 === 'function'){
-                errorCallback_2(err);
-            }else{
-                throw err;
-            }
+            self.saveDocument(newDoc, successCallback, errorCallback);
         }
     }
-
+    /**
+     * save a document to the CouchDB
+     * @param doc the document to save
+     * @param successCallback(body)
+     * @param errorCallback(err)
+     */
     self.saveDocument = function (doc,successCallback,errorCallback){
         // insert 'dataToSave' to CouchDB
         db.insert(doc,
@@ -71,8 +82,8 @@ function CouchDB (database) {
                     /**
                      * body example:
                      * { ok: true,
-                             *   id: '8361e3dfb52f0e28784c3cb5340055bd',
-                             *   rev: '1-0d19569e40b9abc88b79e55d71a48bec' }
+                     *   id: '8361e3dfb52f0e28784c3cb5340055bd',
+                     *   rev: '1-0d19569e40b9abc88b79e55d71a48bec' }
                      */
                     if (successCallback && typeof successCallback === 'function'){
                         successCallback(http_body);
