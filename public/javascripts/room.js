@@ -5,8 +5,9 @@
  */
 define(['../javascripts/api/lightactuatorapi.js',
         '../javascripts/initwamp.js',
-        '../javascripts/api/componentapi.js'],
-function(LightActuatorAPI,init, ComponentAPI){
+        '../javascripts/api/componentapi.js',
+        '../javascripts/Constant.js'],
+function(LightActuatorAPI,init, ComponentAPI,CONSTANT){
    return Room;
 });
 
@@ -22,8 +23,11 @@ function Room() {
         // call on WAMP connection successfully establish
         function successCB(session){
             self.sess = session;
-            self.sess.prefix("room", "http://"+CONSTANT.DOMAIN + ":" + CONSTANT.PORT +  "/room#");
-            self.sess.prefix("actuator", "http://"+CONSTANT.DOMAIN + ":" + CONSTANT.PORT +  "/actuator#");
+            var test_ = '169.254.38.46'
+//            self.sess.prefix("room", "http://"+CONSTANT.DOMAIN + ":" + CONSTANT.PORT +  "/room#");
+//            self.sess.prefix("actuator", "http://"+CONSTANT.DOMAIN + ":" + CONSTANT.PORT +  "/actuator#");
+            self.sess.prefix("room", "http://"+test_ + ":" + CONSTANT.PORT +  "/room#");
+            self.sess.prefix("actuator", "http://"+test_ + ":" + CONSTANT.PORT +  "/actuator#");
 
             // initComponent
             var aComponentAPI = new ComponentAPI();
@@ -69,5 +73,9 @@ function Room() {
             console.log("I am switching the light!");
             self.sess.publish("room:lightStatus",{'turnLightTo': data});
         }
+    }
+
+    self.switchUI = function (onSwitchedLight, successCallback, errorCallback){
+        $(document).on('click','#lightSwitch',self.switchLight);
     }
 }
