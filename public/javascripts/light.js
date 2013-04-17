@@ -53,9 +53,9 @@ function Light() {
     self.updateLightUI = function (newStatus){
         console.log("Now data is : " + newStatus);
         if (newStatus){
-            $('body').css('background','yellow');
+            $('body').attr('class','lightOn');
         }else{
-            $('body').css('background','black');
+            $('body').attr('class','lightOff');
         }
 
     }
