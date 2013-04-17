@@ -302,7 +302,7 @@ test("properties - callback test - updateTemperatureOnSensor",function(done){
     function errorCB(err){
         // there will be output done by 'nano.js', which is out of my control
         // trigger by e.g. deviceID:"12314213432432423154235" - wrong id
-        assert.ok;
+        assert.ok(false, err);
         done();
     }
 });

@@ -264,7 +264,7 @@ test("properties - with configuration",function(done){
     function errorCB_2(err){
         console.log("Error 2: " + err);
         // I would like the test stop
-        assert.ok(false);s
+        assert.ok(false);
         done();
     }
 });

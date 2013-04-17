@@ -10,6 +10,13 @@ define(function(){
 function LightActuatorAPI () {
     var self = this;
 
+    /**
+     * switch the light from on to off, or off to on
+     * @param session {Object} WAMP sess
+     * @param onSwitchedLight (event) published by others who subscribe 'room:lightStatus'
+     * @param rpcSuccessCallback (newLightStatus)
+     * @param rpcErrorCallback (error)
+     */
     self.switchLight = function (session,onSwitchedLight,rpcSuccessCallback,rpcErrorCallback) {
         session.call('actuator:switchLight').then(rpcSuccessCallback,rpcErrorCallback);
 

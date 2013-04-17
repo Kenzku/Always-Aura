@@ -32,6 +32,6 @@ function ComponentAPI(){
      * with the returned data as its parameter
      */
     self.resetComponent = function (session,successCallback) {
-        session.call('component:reset').then(successCB);
+        session.call('component:reset').then(successCallback);
     }
 }

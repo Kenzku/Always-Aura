@@ -10,10 +10,10 @@ require.config({
 });
 require(['light'],function(){
     var aLight = new Light();
-    aLight.init(successCB_1,errorCB);
+    aLight.init(onLightStatusChange,successCB_1,errorCB);
 
     function successCB_1(){
-        aLight.lightStatus(onLightStatusChange,successCB_2,errorCB);
+        aLight.lightStatus(successCB_2,errorCB);
     }
 
     function successCB_2(lightStatus){

@@ -6,13 +6,15 @@
 require.config({
     paths: {
         'roomtest' : '/test/javascripts/roomtest',
-        'lighttest' : '/test/javascripts/lighttest'
+        'lighttest' : '/test/javascripts/lighttest',
+        'lightactuatortest' : '/test/javascripts/lightActuatorAPITest'
     }
 });
 QUnit.config.autostart = false;
-require(['roomtest','lighttest'], function (roomtest,lighttest) {
+require(['roomtest','lighttest','lightactuatortest'], function (roomtest,lighttest,lightactuatortest) {
         QUnit.start();
         roomtest.RunTests();
-//        lighttest.RunTests();
+        lighttest.RunTests();
+        lightactuatortest.RunTests();
     }
 );
