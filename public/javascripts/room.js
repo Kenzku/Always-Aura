@@ -23,11 +23,8 @@ function Room() {
         // call on WAMP connection successfully establish
         function successCB(session){
             self.sess = session;
-            var test_ = '169.254.38.46'
-//            self.sess.prefix("room", "http://"+CONSTANT.DOMAIN + ":" + CONSTANT.PORT +  "/room#");
-//            self.sess.prefix("actuator", "http://"+CONSTANT.DOMAIN + ":" + CONSTANT.PORT +  "/actuator#");
-            self.sess.prefix("room", "http://"+test_ + ":" + CONSTANT.PORT +  "/room#");
-            self.sess.prefix("actuator", "http://"+test_ + ":" + CONSTANT.PORT +  "/actuator#");
+            self.sess.prefix("room", "http://"+CONSTANT.DOMAIN + ":" + CONSTANT.PORT +  "/room#");
+            self.sess.prefix("actuator", "http://"+CONSTANT.DOMAIN + ":" + CONSTANT.PORT +  "/actuator#");
 
             // initComponent
             var aComponentAPI = new ComponentAPI();
