@@ -4,7 +4,7 @@
  * Time: 20:24
  */
 define(['../../javascripts/light.js',
-        '../../javascripts/room.js'],function(Light,Room){
+        '../../javascripts/roomwithswitch.js'],function(Light,Room){
     return {
         RunTests : function(){
             module('Light Status');

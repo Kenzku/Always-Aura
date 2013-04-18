@@ -3,7 +3,7 @@
  * Date: 10/04/2013
  * Time: 13:31
  */
-define(['../../javascripts/room.js','../../javascripts/Constant.js'],function (Room,CONSTANT) {
+define(['../../javascripts/roomwithswitch.js','../../javascripts/Constant.js'],function (Room,CONSTANT) {
         return {
             RunTests: function () {
                 module('Room');
