@@ -26,6 +26,6 @@ To sreve the application you need a server running Node.js with NPM installed. S
 **The application is still under development** and it does not work yet. But, you can checkout the released video at:
 
 * Light and Room First Demo
-    http://www.youtube.com/watch?v=4UlWY4956e4&feature=youtu.be
+    http://www.youtube.com/watch?v=4UlWY4956e4
 
 
