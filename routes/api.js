@@ -158,14 +158,26 @@ function requestDataFromSensor(successCallback,errorCallback){
     }
     aComponent.currentTemperature(successCallback,errorCallback);
 }
-
+/**
+ * switch the light
+ * @param successCallback (newLightStatus)
+ * the light status after switching
+ * @param errorCallback (error) the reason of error
+ * @returns {boolean} if no initialisation, false will return,
+ * otherwise no return.
+ */
 function switchLight(successCallback,errorCallback){
     if(!aComponent){
         return false;
     }
     aComponent.switchLight(Constant.room.id, successCallback, errorCallback);
 }
-
+/**
+ * check light status
+ * @param successCallback (lightStatus) the current light status
+ * @param errorCallback (error) the reason of error
+ * @constructor
+ */
 function LightStatus(successCallback,errorCallback){
     var aLight = new Light();
     aLight.checkLightState(Constant.room.id, successCallback,errorCallback);
