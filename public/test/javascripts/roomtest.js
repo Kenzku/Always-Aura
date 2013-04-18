@@ -3,7 +3,7 @@
  * Date: 10/04/2013
  * Time: 13:31
  */
-define(['../../javascripts/room.js','../../javascripts/Constant.js'],function (Room) {
+define(['../../javascripts/room.js','../../javascripts/Constant.js'],function (Room,CONSTANT) {
         return {
             RunTests: function () {
                 module('Room');
@@ -37,8 +37,7 @@ define(['../../javascripts/room.js','../../javascripts/Constant.js'],function (R
 
                     // switch light callback
                     function rpcSuccessCB_2 (data){
-                        console.log("rpcSuccessCB_2: " + data);
-                        ok(true);
+                        equal(typeof data, 'boolean');
                     }
 
                     function errorCB_2 (err) {
@@ -47,17 +46,10 @@ define(['../../javascripts/room.js','../../javascripts/Constant.js'],function (R
                         start();
                     }
 
-                    function successCB_3 (topicUri, data){
-                        console.log("successCB_3: " + data);
-                        console.log("successCB_3: " + topicUri);
-                        ok(true);
-                        start();
-                    }
-
                     function onSwitchedLight(topicUri, data) {
-                        console.log("onSwitchedLight: " + data);
-                        console.log("onSwitchedLight: " + topicUri);
-                        ok(true);
+                        equal(Object.prototype.toString.call(data),'[object Array]');
+                        equal(data[0],'Light Status');
+                        equal(topicUri,CONSTANT.WAMP.TOPIC.LIGHT_STATUS)
                         start();
                     }
 

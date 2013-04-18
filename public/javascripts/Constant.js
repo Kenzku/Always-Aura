@@ -11,6 +11,10 @@ define(function(){
        WAMP : {
            SESSION : {
                DEFAULT : null
+           },
+           TOPIC : {
+               LIGHT_STATUS : 'room:lightStatus',
+               SWITCH_LIGHT : 'actuator:switchLight'
            }
        },
 

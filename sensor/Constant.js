@@ -33,10 +33,10 @@ exports.room = {
     id : '8361e3dfb52f0e28784c3cb534010c8f',
     isLightOn : null,
     topURI : {
-        lightStatus : 'room:light'
+        lightStatus : 'room:lightStatus'
     },
     subscribe : {
-        lightStatus : 'Subscribe Light Status'
+        lightStatus : 'Light Status'
     }
 }
 

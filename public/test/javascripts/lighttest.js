@@ -3,7 +3,8 @@
  * Date: 16/04/2013
  * Time: 20:24
  */
-define(['../../javascripts/light.js'],function(Light){
+define(['../../javascripts/light.js',
+        '../../javascripts/room.js'],function(Light,Room){
     return {
         RunTests : function(){
             module('Light Status');
@@ -16,18 +17,18 @@ define(['../../javascripts/light.js'],function(Light){
                     aLight.lightStatus(successCB_2,errorCB);
                 }
 
-                function successCB_2(LightStatus){
-                    console.log("LightStatus is : " + LightStatus);
-                    ok(true);
+                function successCB_2(lightStatus){
+                    equal(typeof lightStatus, 'boolean');
                     start();
                 }
                 function errorCB (error){
-                    console.log(error);
-                    ok(false);
+                    ok(false,error);
                     start();
                 }
-                function onLightStatusChange (data){
-                    console.log(data);
+                function onLightStatusChange (topic, event){
+                    console.log(event);
+                    equal(Object.prototype.toString.call(event),'[object Array]');
+                    equal(event[0],'Light Status');
                 }
             });
         }

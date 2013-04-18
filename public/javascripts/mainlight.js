@@ -5,10 +5,11 @@
  */
 require.config({
     paths: {
-        'light' : '/javascripts/light'
+        'light' : '/javascripts/light',
+        'constant' : '/javascripts/Constant'
     }
 });
-require(['light'],function(){
+require(['light','constant'],function(Light,CONSTANT){
     var aLight = new Light();
     aLight.init(onLightStatusChange,successCB_1,errorCB);
 
@@ -17,12 +18,16 @@ require(['light'],function(){
     }
 
     function successCB_2(lightStatus){
-        console.log(lightStatus);
+        aLight.updateLightUI(lightStatus);
     }
     function errorCB (error){
         console.log(error);
     }
-    function onLightStatusChange(data) {
-        aLight.updateLightUI(data);
+    function onLightStatusChange(topic, event) {
+        if (topic == CONSTANT.WAMP.TOPIC.LIGHT_STATUS &&
+            Object.prototype.toString.call(event) == '[object Array]' &&
+            event.length == 4){
+            aLight.updateLightUI(event[2].turnLightTo);
+        }
     }
 });

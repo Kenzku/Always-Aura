@@ -60,15 +60,22 @@ function Room() {
      * the room can turn on the light, because it has a switch
      * @param onSwitchedLight (topicUri, data) where the data define in /lib/handlers.js
      * @param successCallback (boolean) the status of the light, after switch
-     * @param errorCallback (err)
+     * @param errorCallback (error) the reason of error
      */
     self.switchLight = function (onSwitchedLight, successCallback, errorCallback){
         var aLightActuatorAPI = new LightActuatorAPI();
-        aLightActuatorAPI.switchLight(self.sess, onSwitchedLight, rpcSuccessCB, errorCallback);
+        aLightActuatorAPI.switchLight(self.sess, onSwitchedLight, rpcSuccessCallback, errorCallback);
 
-        function rpcSuccessCB (data) {
+        /**
+         * call when knows t
+         * @param data {Boolean} light status after switching
+         */
+        function rpcSuccessCallback (data) {
             console.log("I am switching the light!");
             self.sess.publish("room:lightStatus",{'turnLightTo': data});
+            if (successCallback && typeof successCallback === 'function'){
+                successCallback(data);
+            }
         }
     }
 
