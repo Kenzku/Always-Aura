@@ -5,10 +5,10 @@
  */
 require.config({
     paths: {
-        'room' : '/javascripts/roomwithswitch'
+        'room' : '/javascripts/room'
     }
 });
-require(['roomwithswitch'],function(){
+require(['room'],function(){
     var aRoom = new Room();
 
     aRoom.comeIn(successCB_1,errorCB_1);
