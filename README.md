@@ -1,9 +1,10 @@
 Always-Aura
 ===========
 
-This is a part of my Master's thesis work, the topic is **Web Technology on Internet of Things**.
+This is a part of my Master's thesis work, the topic is **Web Technology on Internet of Things**. The primary technology is
+```WebSocket``` with sub-protocol ```WAMP``` (More see: http://wamp.ws)
 
-The problem is that I would like to try out runing a WAMP server on each of sensors, so that each sensor is enable to use
+The problem is that I would like to try out runing a ```WAMP``` server on each of sensors, so that each sensor is enable to use
 publish/subscribe mode and RPC mode. By doing this, the whole architecture can get benefit from using less port, but will 
 maintain websocket connections instead. 
 
