@@ -69,8 +69,10 @@ function Light() {
 //        console.log("Now data is : " + newStatus);
         if (newStatus){
             $('body').attr('class','lightOn');
+            $('p').attr('class','textLightOn')
         }else{
             $('body').attr('class','lightOff');
+            $('p').attr('class','textLightOff')
         }
 
     }
