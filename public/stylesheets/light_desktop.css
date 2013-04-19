@@ -2,11 +2,15 @@
     display:block;
     margin-left: auto;
     margin-right: auto;
+    top: 42%;
+    bottom: 50%;
+    position: relative;
 }
+
 .lightOn {
     background-repeat: no-repeat;
     /* for continuous after the no-repeat */
-    background-color: rgba(254,255,209,1);
+    /*background-color: rgba(254,255,209,1);*/
     /* for no-repeat */
     background-image: -moz-radial-gradient(center, circle cover, rgba(251,255,58,1) 0%, rgba(254,255,209,1) 23%); /* FF3.6+ */
     background-image: -webkit-gradient(radial, center center, 0px, center center, 100%, color-stop(0%,rgba(251,255,58,1)), color-stop(23%,rgba(254,255,209,1))); /* Chrome,Safari4+ */
@@ -19,7 +23,7 @@
 .lightOff {
     background-repeat: no-repeat;
     /* for continuous after the no-repeat */
-    background-color: rgba(0,0,0,1); /* Old browsers */
+    /*background-color: rgba(0,0,0,1); *//* Old browsers */
     /* for no-repeat */
     background-image: -moz-radial-gradient(center, circle cover, rgba(89,89,89,1) 1%, rgba(0,0,0,1) 13%); /* FF3.6+ */
     background-image: -webkit-gradient(radial, center center, 0px, center center, 100%, color-stop(1%,rgba(89,89,89,1)), color-stop(13%,rgba(0,0,0,1))); /* Chrome,Safari4+ */
@@ -29,7 +33,10 @@
     background-image: radial-gradient(circle at center, rgba(89,89,89,1) 1%,rgba(0,0,0,1) 13%); /* W3C */
     filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#595959', endColorstr='#000000',GradientType=1 ); /* IE6-9 fallback on horizontal gradient */
 }
-body {
+html, body {
+    margin: 0;
+    width: 100%;
+    height: 100%;
     background-color: rgba(0,0,0,1);
 }
 p, .textLightOff{

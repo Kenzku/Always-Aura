@@ -15,6 +15,7 @@ require(['room'],function(){
 
     function successCB_1(sess){
         aRoom.switchUI(onSwitchedLight,rpcSuccessCB_2,errorCB_2);
+        aRoom.adjustUI(onAdjustLight, rpcSuccessCB_2, errorCB_2);
     }
     function errorCB_1 (err) {
         console.log(err);
@@ -38,4 +39,9 @@ require(['room'],function(){
         console.log("onSwitchedLight: " + data);
         console.log("onSwitchedLight: " + topicUri);
     }
+    function onAdjustLight(topicUri, data) {
+        console.log("onSwitchedLight: " + data);
+        console.log("onSwitchedLight: " + topicUri);
+    }
+
 });

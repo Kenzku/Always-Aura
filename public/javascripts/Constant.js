@@ -23,9 +23,9 @@ define(function(){
            DEFAULT : {
                SWITCH_MODE : {
                    ON_OFF : 'onoff',
-                   DIAL : 'dial'
+                   DIMMER : 'dimmer'
                },
-               DIAL : {
+               DIMMER : {
                    STRENGTH : ( 0 % 100 ) / 100
                },
                SWITCH : {

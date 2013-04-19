@@ -13,8 +13,8 @@ require.config({
 QUnit.config.autostart = false;
 require(['roomtest','lighttest','lightactuatortest'], function (roomtest,lighttest,lightactuatortest) {
         QUnit.start();
-//        roomtest.RunTests();
+        roomtest.RunTests();
         lighttest.RunTests();
-//        lightactuatortest.RunTests();
+        lightactuatortest.RunTests();
     }
 );

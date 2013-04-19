@@ -66,14 +66,37 @@ function Light() {
     }
 
     self.updateLightUI = function (newStatus){
-//        console.log("Now data is : " + newStatus);
-        if (newStatus){
-            $('body').attr('class','lightOn');
-            $('p').attr('class','textLightOn')
-        }else{
-            $('body').attr('class','lightOff');
-            $('p').attr('class','textLightOff')
+        switch (typeof newStatus) {
+            case 'boolean' :
+                onOffMode(newStatus);
+                break;
+            case 'number' :
+                dimmer(newStatus);
         }
 
+        function onOffMode(newStatus) {
+            console.log(newStatus);
+            $('body').removeAttr('style');
+            if (newStatus) {
+                $('body').attr('class', 'lightOn');
+                $('p').attr('class', 'textLightOn');
+            } else {
+                $('body').attr('class', 'lightOff');
+                $('p').attr('class', 'textLightOff');
+            }
+        }
+
+        function dimmer(newStatus){
+            if (newStatus > 1) {
+                var colour = "radial-gradient(circle at center, rgb(251, 255, 58) " + newStatus+ "%, rgb(254, 255, 209) " + newStatus * 2 + "%)"
+                $('body').attr('class', 'lightOn');
+                $('p').attr('class', 'textLightOn');
+                $('.lightOn').css('background-image',colour);
+            } else {
+                $('body').removeAttr('style');
+                $('body').attr('class', 'lightOff');
+                $('p').attr('class', 'textLightOff')
+            }
+        }
     }
 }

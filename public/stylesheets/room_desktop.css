@@ -32,3 +32,19 @@
       position:relative;
       top:1px;
 }
+
+#dimmer {
+    -webkit-appearance: none;
+    padding-left: 2px;
+    padding-right: 2px;
+    -webkit-border-radius: 5px;
+    background: #ededed;
+    margin: 0px;
+    margin-top: 10px;
+    width: 100px;
+}
+
+p, #dimmer {
+    font-family: 'Lato', sans-serif;
+    font-size: 20px;
+}

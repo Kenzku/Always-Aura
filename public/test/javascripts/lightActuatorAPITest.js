@@ -83,7 +83,7 @@ define(['../../javascripts/api/lightactuatorapi.js',
                         type : 'actuator',
                         cancelable: true,
 
-                        switchMode : CONSTANT.COMPONENT_SPEC.DEFAULT.SWITCH_MODE.DIAL,
+                        switchMode : CONSTANT.COMPONENT_SPEC.DEFAULT.SWITCH_MODE.DIMMER,
                         strength : 90
                     };
 

@@ -72,14 +72,36 @@ function Room() {
          */
         function rpcSuccessCallback (data) {
             console.log("I am switching the light!");
-            self.sess.publish("room:lightStatus",{'turnLightTo': data});
+            // exclude me: according to the standard
+            self.sess.publish("room:lightStatus",
+                {
+                'turnLightTo': data
+                },
+                true);
             if (successCallback && typeof successCallback === 'function'){
                 successCallback(data);
             }
         }
     }
+    // it seems I do not need to subscribe the topic before publish
+    self.adjustLuminance = function(data){
+        self.sess.publish("room:lightStatus",
+            {
+             'turnLightTo': data
+            },
+            true);
+    }
 
     self.switchUI = function (onSwitchedLight, successCallback, errorCallback){
         $(document).on('click','#lightSwitch',self.switchLight);
+    }
+    self.adjustUI = function (onAdjustLight, successCallback, errorCallback){
+        $(document).on('mouseup','#dimmer',function(event){
+            // set On/off status on CouchDB
+        });
+        $(document).on('change','#dimmer',function(event){
+
+            self.adjustLuminance(parseInt($('#dimmer').val()));
+        });
     }
 }
