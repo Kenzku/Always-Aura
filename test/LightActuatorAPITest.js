@@ -75,7 +75,7 @@ test("properties - without configuration", function() {
         type : 'actuator',
         cancelable: Constant.CancelAble.true,
 
-        switchMode : Constant.ComponentSpec.default.switchMode.dial,
+        switchMode : Constant.ComponentSpec.default.switchMode.dimmer,
         strength : 50
     }
     aLightActuator.config(configuration);
@@ -90,8 +90,8 @@ test("properties - without configuration", function() {
     assert.equal(aLightActuator.aGenericComponent.eventFireMode,"valuechange");
     assert.deepEqual(aLightActuator.aGenericComponent.position,{latitude:20.123412,longitude: 81.9023213});
 
-    assert.deepEqual(aLightActuator.switchMode, Constant.ComponentSpec.default.switchMode.dial);
-    assert.deepEqual(aLightActuator.switchMode, 'dial');
+    assert.deepEqual(aLightActuator.switchMode, Constant.ComponentSpec.default.switchMode.dimmer);
+    assert.deepEqual(aLightActuator.switchMode, 'dimmer');
     assert.deepEqual(aLightActuator.strength,0.5); // calculated by the actuator
 
     assert.deepEqual(aLightActuator.aGenericComponent.maximumRange, 10);
@@ -126,7 +126,7 @@ test("properties - with configuration",function(){
         type : 'actuator',
         cancelable: Constant.CancelAble.true,
 
-        switchMode : Constant.ComponentSpec.default.switchMode.dial,
+        switchMode : Constant.ComponentSpec.default.switchMode.dimmer,
         strength : 90
     }
 
@@ -149,7 +149,7 @@ test("properties - with configuration",function(){
         type : 'actuator',
         cancelable: Constant.CancelAble.true,
 
-        switchMode : 'dial',
+        switchMode : 'dimmer',
         strength : 0.9 // SIMULATION: this has been calculated by the sensor
     };
 
@@ -186,8 +186,8 @@ test("properties - with configuration",function(){
     assert.equal(aLightActuator.aGenericComponent.eventFireMode,"valuechange");
     assert.deepEqual(aLightActuator.aGenericComponent.position,{latitude:20.123412,longitude: 81.9023213});
 
-    assert.deepEqual(aLightActuator.switchMode, Constant.ComponentSpec.default.switchMode.dial);
-    assert.deepEqual(aLightActuator.switchMode, 'dial');
+    assert.deepEqual(aLightActuator.switchMode, Constant.ComponentSpec.default.switchMode.dimmer);
+    assert.deepEqual(aLightActuator.switchMode, 'dimmer');
     assert.deepEqual(aLightActuator.strength,0.9);
 
     assert.deepEqual(aLightActuator.aGenericComponent.maximumRange, 10);
@@ -291,7 +291,7 @@ test('switch light - switchLight()',function(done){
 });
 //mocha ./test/LightActuatorAPITest.js -R spec -u qunit -g adjustLuminance -t 6000
 test('adjust luminance - self.adjustLuminance', function(done){
-    var aLightActuator = new LightActuator();
+    var aLightActuator = new LightActuator({switchMode:Constant.ComponentSpec.default.switchMode.dimmer});
     aLightActuator.adjustLuminance(Constant.room.id,50,successCB,errorCB);
 
     function successCB(result){

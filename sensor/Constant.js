@@ -53,9 +53,9 @@ exports.ComponentSpec = {
         config : null,
         switchMode : {
             onoff : 'onoff',
-            dial : 'dial'
+            dimmer : 'dimmer'
         },
-        dial : {
+        dimmer : {
             strength : ( 0 % 100 ) / 100
         },
         switch : {
@@ -103,7 +103,8 @@ exports.Error = {
     },
     LightActuator : {
         room : 'no room id',
-        strength : 'strength not specified'
+        strength : 'strength not specified',
+        dimmer : 'does not support dimmer'
     }
 }
 

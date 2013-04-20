@@ -15,13 +15,13 @@ function LightActuator (configuration) {
     self.aComponentEvent = new self.aGenericComponent.componentEvent();
 
     /**
-     * a on/off switch, or a dial
+     * a on/off switch, or a dimmer
      * @type {String}
      */
     self.switchMode = Constant.ComponentSpec.default.switchMode.onoff;
     /**
      * if it is a Boolean, it refers to on/off mode: true - on, false-off
-     * if it is a Number, it refers to dial mode: 0-100,
+     * if it is a Number, it refers to dimmer mode: 0-100,
      * where 0 is the minimal power
      * @type {Boolean} or {Number}
      */
@@ -64,6 +64,13 @@ function LightActuator (configuration) {
      * @param errorCallback (error)
      */
     self.adjustLuminance = function (lightId, strength, successCallback, errorCallback) {
+        if (self.switchMode != Constant.ComponentSpec.default.switchMode.dimmer){
+            if (errorCallback && typeof errorCallback === 'function'){
+                errorCallback(Constant.Error.LightActuator.dimmer);
+            }else{
+                throw Constant.Error.LightActuator.dimmer;
+            }
+        }
         if (strength.constructor !== Number) {
             if (errorCallback && typeof errorCallback === 'function'){
                 errorCallback(Constant.Error.LightActuator.strength);
@@ -133,7 +140,7 @@ function LightActuator (configuration) {
                 // on off mode
                 ( (configuration.strength == Constant.ComponentSpec.default.switch.on || configuration.strength == Constant.ComponentSpec.default.switch.off) ?
                     configuration.strength : Constant.ComponentSpec.default.switch.off )
-                // dial mode
+                // dimmer mode
                 : ( (configuration.strength >= 0 && configuration.strength<=100) ?
                     configuration.strength / 100 : (configuration.strength % 100) / 100 );
         }else{
