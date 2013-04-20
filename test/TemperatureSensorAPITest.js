@@ -246,11 +246,12 @@ test("properties - with configuration",function(done){
     expect(aTemperatureSensor.aComponentEvent.callback).to.be.a('function');
     /* callback function on Generic Sensor API - on the sensor */
     var result = aTemperatureSensor.aComponentEvent.callback(successCB_1,errorCB);
-    /* doAction on Generic Sensor API - on the sensor */
-    var result = aTemperatureSensor.currentTemperature(successCB_2,errorCB);
 
     function successCB_1(result){
         assert.deepEqual(result, null);
+        // avoid CouchDB _rev conflict
+        /* doAction on Generic Sensor API - on the sensor */
+        var result = aTemperatureSensor.currentTemperature(successCB_2,errorCB);
     }
     function successCB_2(result){
         assert.deepEqual(result,null);
@@ -259,7 +260,7 @@ test("properties - with configuration",function(done){
         done();
     }
     function errorCB (err){
-        assert.ok;
+        assert.ok(false,err);
         done();
     }
 });
@@ -282,9 +283,8 @@ test("properties - callback test - updateTemperatureOnSensor",function(done){
         version:1.0,
 
         type : 'sensor',
-        cancelable: Constant.CancelAble.true,
+        cancelable: Constant.CancelAble.true
 
-        callback : function () { return "This is a feedback" }
     }
     var aTemperatureSensor = new TemperatureSensor(configuration);
 
@@ -308,16 +308,16 @@ test("properties - callback test - updateTemperatureOnSensor",function(done){
 });
 
 test('CouchDB - connection',function(done){
-    var aCouchDB = new CouchDB();
+    var aCouchDB = new CouchDB('saku_snabb');
     aCouchDB.readDocument('bd27134d93f07d65d244e502971f5573',
         // success CB
         function(body){
-            assert.ok;
+            assert.ok(true);
             done();
         },
         // error CB
         function(err){
-            assert.ok;
+            assert.ok(false,err);
             done();
         });
 });

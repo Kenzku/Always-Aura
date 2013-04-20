@@ -56,8 +56,8 @@ function LightActuator (configuration) {
     }
 
     /**
-     * reset current sensor state
-     * you might need to re-config the sensor after reset
+     * reset current actuator state
+     * you might need to re-config the actuator after reset
      * by calling 'config'
      */
     self.resetState = function () {
@@ -67,19 +67,19 @@ function LightActuator (configuration) {
         self.config();
     };
     /**
-     * the sensor configuration
+     * the actuator configuration
      * @type {{}}
      */
     self.configuration = Constant.ComponentSpec.default.config;
     /**
-     * should referece GenericSensorAPI
+     * should referece GenericComponentAPI
      * @type {{}}
      * @param configuration
      */
     self.config = function (configuration) {
         var options = {};
         if (configuration && typeof configuration === 'object'){
-            // initialise Generic Sensor
+            // initialise Generic actuator
             options = {
                 componentType: Constant.ComponentSpec.type.actuator.switch,
                 deviceID: configuration.deviceID || Constant.ComponentSpec.default.did,
@@ -97,12 +97,12 @@ function LightActuator (configuration) {
             };
             self.aGenericComponent.configureComponent(options);
 
-            // initialise Sensor Event
+            // initialise actuator Event
             options = {
                 type : Constant.EventType.actuator,
                 returnValue : Constant.ComponentSpec.default.data,
                 cancelable: configuration.cancelable || Constant.CancelAble.false,
-                // validation will be check in GenericSensorAPI
+                // validation will be check in GenericComponentAPI
                 callback : self.switchLight
             };
             self.aComponentEvent.initComponentEvent(options);

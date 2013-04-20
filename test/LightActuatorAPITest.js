@@ -1,8 +1,8 @@
 /**
- * Author: Ken
- * Date: 09/04/2013
- * Time: 14:39
- */
+* Author: Ken
+* Date: 09/04/2013
+* Time: 14:39
+*/
 var assert = require("assert");
 var expect = require('chai').expect;
 var LightActuator = require('../sensor/LightActuatorAPI');
@@ -106,7 +106,7 @@ test("properties - without configuration", function() {
 
 });
 
-test("properties - with configuration",function(done){
+test("properties - with configuration",function(){
     var configuration = {
         componentType:"switchTEST", // this should not have been changed
         deviceID:"12314213432432423154235",
@@ -150,10 +150,10 @@ test("properties - with configuration",function(done){
         cancelable: Constant.CancelAble.true,
 
         switchMode : 'dial',
-        strength : 0.9 // SIMILATION: this has been calculated by the sensor
+        strength : 0.9 // SIMULATION: this has been calculated by the sensor
     };
 
-    var OriginalConfigInSensor = {
+    var OriginalConfigInActuator = {
         componentType: "switch",
         deviceID: "",
         returnable: true,
@@ -205,12 +205,12 @@ test("properties - with configuration",function(done){
     // reset everything
     aLightActuator.resetState();
 
-    var aGenericSensor = new GenericComponent();
+    var aGenericComponent = new GenericComponent();
 
     /* property */
     assert.ok(aLightActuator.aGenericComponent instanceof GenericComponent);
     assert.ok(aLightActuator.aComponentEvent instanceof aLightActuator.aGenericComponent.componentEvent);
-    assert.deepEqual(aLightActuator.configuration, OriginalConfigInSensor);
+    assert.deepEqual(aLightActuator.configuration, OriginalConfigInActuator);
 
     assert.deepEqual(aLightActuator.switchMode, Constant.ComponentSpec.default.switchMode.onoff);
     assert.deepEqual(aLightActuator.switchMode, 'onoff');
@@ -236,21 +236,24 @@ test("properties - with configuration",function(done){
     assert.equal(aLightActuator.aComponentEvent.type, Constant.EventType.actuator);
     assert.equal(aLightActuator.aComponentEvent.type, "actuator");
     assert.deepEqual(aLightActuator.aComponentEvent.cancelable, false);
-    assert.equal(aLightActuator.aComponentEvent.eventFireMode, aGenericSensor.eventFireMode);
-    assert.deepEqual(aLightActuator.aComponentEvent.position,aGenericSensor.position);
+    assert.equal(aLightActuator.aComponentEvent.eventFireMode, aGenericComponent.eventFireMode);
+    assert.deepEqual(aLightActuator.aComponentEvent.position,aGenericComponent.position);
     assert.deepEqual(aLightActuator.aComponentEvent.returnValue, Constant.ComponentSpec.default.data);
     assert.deepEqual(aLightActuator.aComponentEvent.returnValue, null);
     assert.equal(aLightActuator.aComponentEvent.cancelable,Constant.CancelAble.false);
+});
 
+test('switch light',function(done){
+    var aLightActuator = new LightActuator();
     /* callback function's behaviour */
     expect(aLightActuator.aComponentEvent.callback).to.be.a('function');
-    /* callback function on Generic Sensor API - on the sensor */
+    /* callback function on Generic Component API - on the Component */
     var result = aLightActuator.aComponentEvent.callback(Constant.room.id,successCB_1,errorCB_1);
-    /* doAction on Generic Sensor API - on the sensor */
-    var result = aLightActuator.switchLight(Constant.room.id,successCB_2,errorCB_2);
 
     function successCB_1(result){
         assert.ok(true);
+        /* doAction on Generic Component API - on the Component */
+        var result = aLightActuator.switchLight(Constant.room.id,successCB_2,errorCB_2);
     }
     function errorCB_1(err){
         console.log("Error 1: " + err);
@@ -267,7 +270,7 @@ test("properties - with configuration",function(done){
         assert.ok(false);
         done();
     }
-});
+})
 
 //mocha ./test/LightActuatorAPITest.js -R spec -u qunit -g switchLight -t 6000
 test('switch light - switchLight()',function(done){
