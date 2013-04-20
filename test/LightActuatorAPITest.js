@@ -279,6 +279,22 @@ test('switch light - switchLight()',function(done){
     aLightActuator.switchLight(Constant.room.id,successCB,errorCB);
 
     function successCB(result){
+        console.log(result);
+        assert.ok(true);
+        done();
+    }
+
+    function errorCB(err){
+        assert.ok(false,err);
+        done();
+    }
+});
+//mocha ./test/LightActuatorAPITest.js -R spec -u qunit -g adjustLuminance -t 6000
+test('adjust luminance - self.adjustLuminance', function(done){
+    var aLightActuator = new LightActuator();
+    aLightActuator.adjustLuminance(Constant.room.id,50,successCB,errorCB);
+
+    function successCB(result){
         assert.ok(true);
         done();
     }

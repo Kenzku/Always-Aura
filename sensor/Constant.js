@@ -30,7 +30,8 @@ exports.State = {
 }
 
 exports.room = {
-    id : '8361e3dfb52f0e28784c3cb534010c8f',
+    // this id identifies the light
+    id : '8361e3dfb52f0e28784c3cb53404477a',
     isLightOn : null,
     topURI : {
         lightStatus : 'room:lightStatus'
@@ -101,7 +102,8 @@ exports.Error = {
         save : 'save document error'
     },
     LightActuator : {
-        room : 'no room id'
+        room : 'no room id',
+        strength : 'strength not specified'
     }
 }
 

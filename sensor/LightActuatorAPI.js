@@ -29,30 +29,50 @@ function LightActuator (configuration) {
 
     /**
      * switch the light
-     * @param roomId {String} the id of the room
+     * @param lightId {String} the id of the light
      * @param successCallback (newLightStatus)
      * @param errorCallback (error)
      */
-    self.switchLight = function (roomId, successCallback,errorCallback){
+    self.switchLight = function (lightId, successCallback,errorCallback){
         var aCouchDB = new CouchDB('room');
         var aLight = new Light();
-        if (!roomId || typeof roomId === 'function'){
+        if (!lightId || typeof lightId === 'function'){
             if (errorCallback && typeof errorCallback === 'function'){
                 errorCallback(Constant.Error.LightActuator.room);
             }else{
                 throw Constant.Error.LightActuator.room;
             }
         }
-        aLight.checkLightState(roomId,successCB, errorCallback);
+        aLight.checkLightState(lightId,successCB_1, errorCallback);
 
         // success callback to aCouchDB.readDocument
-        function successCB (lightStatus){
-            aCouchDB.updateDocument(Constant.room.id,'isLightOn',{isLightOn:!lightStatus},null, errorCallback);
-            if (successCallback && typeof successCallback === 'function'){
-                // the new status: !lightStatus
-                successCallback(!lightStatus);
+        function successCB_1 (lightStatus){
+            aCouchDB.updateDocument(Constant.room.id,'isLightOn',{isLightOn:!lightStatus},successCB_2, errorCallback);
+            function successCB_2 (body) {
+                if (successCallback && typeof successCallback === 'function'){
+                    // the new status: !lightStatus
+                    successCallback(!lightStatus);
+                }
             }
         }
+    }
+    /**
+     * update luminance
+     * @param lightId {String} the id of the light
+     * @param strength {Number} the strength of the luminance
+     * @param successCallback (body) body: update succeed body return by CouchDB
+     * @param errorCallback (error)
+     */
+    self.adjustLuminance = function (lightId, strength, successCallback, errorCallback) {
+        if (strength.constructor !== Number) {
+            if (errorCallback && typeof errorCallback === 'function'){
+                errorCallback(Constant.Error.LightActuator.strength);
+            }else{
+                throw Constant.Error.LightActuator.strength;
+            }
+        }
+        var aCouchDB = new CouchDB('room');
+        aCouchDB.updateDocument(Constant.room.id,'strength',{strength:parseInt(strength)},successCallback, errorCallback);
     }
 
     /**

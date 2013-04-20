@@ -16,6 +16,7 @@ function CouchDB (database) {
      * @param errorCallback(error), called when read error
      */
     self.readDocument = function (id,successCallback,errorCallback) {
+
         db.get(id, function(err, body) {
             if (err) {
                 if (errorCallback && typeof errorCallback === 'function'){
@@ -48,6 +49,7 @@ function CouchDB (database) {
         // success for read document
         function successCallback_1(body){
             var newDoc = body;
+
             if (field){
                 if (doc.hasOwnProperty(field)) {
                     newDoc[field] = doc[field];
@@ -92,7 +94,6 @@ function CouchDB (database) {
             }
         );
     }
-
 }
 
 module.exports = CouchDB;
