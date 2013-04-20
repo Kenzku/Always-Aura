@@ -295,6 +295,7 @@ test('adjust luminance - self.adjustLuminance', function(done){
     aLightActuator.adjustLuminance(Constant.room.id,50,successCB,errorCB);
 
     function successCB(result){
+        console.log(result);
         assert.ok(true);
         done();
     }

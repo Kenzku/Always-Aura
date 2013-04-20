@@ -61,6 +61,10 @@ function LightActuator (configuration) {
      * @param lightId {String} the id of the light
      * @param strength {Number} the strength of the luminance
      * @param successCallback (body) body: update succeed body return by CouchDB
+     * body example:
+     * { ok: true,
+     * id: '8361e3dfb52f0e28784c3cb53404477a',
+     * rev: '23-fcd31d0099280925732615886ea01c39' }
      * @param errorCallback (error)
      */
     self.adjustLuminance = function (lightId, strength, successCallback, errorCallback) {

@@ -28,7 +28,10 @@ function Room() {
 
             // initComponent
             var aComponentAPI = new ComponentAPI();
-            aComponentAPI.initComponent(self.sess,'switch',null,onSwitchReady,errorCallback);
+            aComponentAPI.initComponent(self.sess,
+                                        'switch',
+                                        {switchMode:CONSTANT.COMPONENT_SPEC.DEFAULT.SWITCH_MODE.DIMMER},
+                                        onSwitchReady,errorCallback);
         }
 
         /**
@@ -50,11 +53,6 @@ function Room() {
             }
         }
     }
-
-    self.lightStatus = function (successCallback, errorCallback){
-        // make an RPC to check
-    }
-
 
     /**
      * the room can turn on the light, because it has a switch
@@ -95,13 +93,28 @@ function Room() {
     self.switchUI = function (onSwitchedLight, successCallback, errorCallback){
         $(document).on('click','#lightSwitch',self.switchLight);
     }
-    self.adjustUI = function (onAdjustLight, successCallback, errorCallback){
+
+    self.adjustUI = function (onAdjustLight, rpcSuccessCallback, rpcErrorCallback){
+        var aLightActuatorAPI = new LightActuatorAPI();
+        // for efficiency, final state only
         $(document).on('mouseup','#dimmer',function(event){
+
             // set On/off status on CouchDB
+            aLightActuatorAPI.adjustLuminance(self.sess,converter(),rpcSuccessCallback,rpcErrorCallback);
         });
         $(document).on('change','#dimmer',function(event){
 
             self.adjustLuminance(parseInt($('#dimmer').val()));
         });
+        /**
+         * because of UI simulation only ranging from 0 to 30
+         * @returns {Number} the real strength of luminance
+         */
+        function converter (){
+            var _strength = $('#dimmer').val();
+            var strength = ( 10 * _strength ) / 3;
+            return parseInt(strength);
+        }
     }
+
 }

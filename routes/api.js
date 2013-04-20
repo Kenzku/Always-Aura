@@ -65,6 +65,19 @@ module.exports = function api_module(cfg){
             function errorCB(err){
                 cb(err);
             }
+        },
+        'room:adjustLuminance' : function (args,cb){
+            var strength = args.shift();
+            var result = adjustLuminance(strength, successCB, errorCB);
+            if (result == false){
+                cb(Constant.Error.reset.NO_INIT);
+            }
+            function successCB(data) {
+                cb(null,data);
+            }
+            function errorCB (err) {
+                cb(err);
+            }
         }
     };
 
@@ -181,4 +194,17 @@ function switchLight(successCallback,errorCallback){
 function LightStatus(successCallback,errorCallback){
     var aLight = new Light();
     aLight.checkLightState(Constant.room.id, successCallback,errorCallback);
+}
+/**
+ * adjust luminance
+ * @param strength {Number}
+ * @param successCallback (body) the update succeed body check: adjustLuminance
+ * @param errorCallback (error)
+ * @returns {boolean}
+ */
+function adjustLuminance(strength, successCallback,errorCallback) {
+    if(!aComponent){
+        return false;
+    }
+    aComponent.adjustLuminance(Constant.room.id, parseInt(strength) ,successCallback, errorCallback);
 }

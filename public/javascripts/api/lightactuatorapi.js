@@ -34,8 +34,18 @@ function LightActuatorAPI () {
     self.lightStatus = function (session, rpcSuccessCallback, rpcErrorCallback){
         session.call('room:LightStatus').then(rpcSuccessCallback,rpcErrorCallback);
     }
-
-
+    /**
+     * adjust luminance
+     * @param session {Object}
+     * @param strength {Number}
+     * @param rpcSuccessCallback (body) the update succeed body check under layer API: adjustLuminance
+     * @param rpcErrorCallback (err)
+     * example err:
+     * Object {uri: "http://autobahn.tavendo.de/error#generic", desc: "does not support dimmer"}
+     */
+    self.adjustLuminance = function (session, strength, rpcSuccessCallback, rpcErrorCallback) {
+        session.call('room:adjustLuminance',strength).then(rpcSuccessCallback,rpcErrorCallback);
+    }
 
 }
 
