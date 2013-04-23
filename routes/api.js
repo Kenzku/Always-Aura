@@ -54,6 +54,30 @@ module.exports = function api_module(cfg){
                 cb(err);
             }
         },
+        'actuator:switchOn' : function (args,cb){
+            var result = switchOn(successCB,errorCB);
+            if (result == false){
+                cb(Constant.Error.reset.NO_INIT);
+            }
+            function successCB(data){
+                cb(null,data);
+            }
+            function errorCB(err){
+                cb(err);
+            }
+        },
+        'actuator:switchOff' : function (args,cb){
+            var result = switchOff(successCB,errorCB);
+            if (result == false){
+                cb(Constant.Error.reset.NO_INIT);
+            }
+            function successCB(data){
+                cb(null,data);
+            }
+            function errorCB(err){
+                cb(err);
+            }
+        },
         'room:LightStatus' : function(args,cb){
             var result = LightStatus(successCB,errorCB);
             if (result == false){
@@ -189,18 +213,47 @@ function switchLight(successCallback,errorCallback){
  * check light status
  * @param successCallback (lightStatus) the current light status
  * @param errorCallback (error) the reason of error
- * @constructor
  */
 function LightStatus(successCallback,errorCallback){
     var aLight = new Light();
     aLight.checkLightState(Constant.room.id, successCallback,errorCallback);
 }
+
+/**
+ * switch the light on, ignore its current state
+ * @param successCallback (body) update success body, information about the entry
+ * @param errorCallback (error)
+ * @returns {boolean}
+ */
+function switchOn (successCallback,errorCallback){
+    if(!aComponent){
+        return false;
+    }
+    aComponent.switchOn(Constant.room.id,successCallback,errorCallback);
+}
+
+/**
+ * switch the light off, ignore its current state;
+ * if the light actuator support dimmer, the strength will be set to 0,
+ * @param successCallback (body) update success body, information about the entry
+ * @param errorCallback (error)
+ * @returns {boolean} return false,
+ * only if the component hasn't been initialised
+ */
+function switchOff (successCallback,errorCallback){
+    if(!aComponent){
+        return false;
+    }
+    aComponent.switchOff(Constant.room.id,successCallback,errorCallback);
+}
+
 /**
  * adjust luminance
  * @param strength {Number}
  * @param successCallback (body) the update succeed body check: adjustLuminance
  * @param errorCallback (error)
- * @returns {boolean}
+ * @returns {boolean} return false,
+ * only if the component hasn't been initialised
  */
 function adjustLuminance(strength, successCallback,errorCallback) {
     if(!aComponent){

@@ -39,8 +39,7 @@ define(['../../javascripts/api/lightactuatorapi.js',
                     }
 
                     function errorCB_2 (err) {
-                        console.log(err);
-                        ok();
+                        ok(false,err);
                         start();
                     }
 
@@ -94,8 +93,7 @@ define(['../../javascripts/api/lightactuatorapi.js',
                         start();
                     }
                     function errorCB_2 (err) {
-                        console.log(err);
-                        ok(true);
+                        ok(false,err);
                         start();
                     }
 
@@ -190,6 +188,44 @@ define(['../../javascripts/api/lightactuatorapi.js',
 
                     function successCB_3 (result){
                         deepEqual(result, OriginalConfiguration);
+                        start();
+                    }
+                });
+
+                asyncTest('Switch On - ignore current state', function(){
+                    init(successCB, errorCB);
+
+                    function successCB (session){
+                        var aLightActuatorAPI = new LightActuatorAPI();
+                        aLightActuatorAPI.switchOn(session,rpcSuccessCB,errorCB);
+                    }
+
+                    function errorCB(error){
+                        ok(false, error);
+                        start();
+                    }
+
+                    function rpcSuccessCB (body){
+                        equal(body.ok,true);
+                        start();
+                    }
+                });
+
+                asyncTest('Switch Off - ignore current state', function(){
+                    init(successCB, errorCB);
+
+                    function successCB (session){
+                        var aLightActuatorAPI = new LightActuatorAPI();
+                        aLightActuatorAPI.switchOff(session,rpcSuccessCB,errorCB);
+                    }
+
+                    function errorCB(error){
+                        ok(false, error);
+                        start();
+                    }
+
+                    function rpcSuccessCB (body){
+                        equal(body.ok,true);
                         start();
                     }
                 });

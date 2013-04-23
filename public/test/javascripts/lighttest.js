@@ -28,7 +28,15 @@ define(['../../javascripts/light.js',
                 function onLightStatusChange (topic, event){
                     console.log(event);
                     equal(Object.prototype.toString.call(event),'[object Array]');
-                    equal(event[0],'Light Status');
+                    if (event[0] == 'message'){
+                        /**
+                         * because for protocol reason,
+                         * this will also receive the first establish message
+                         */
+                        ok(true);
+                    }else{
+                        equal(event[0],'Light Status');
+                    }
                 }
             });
         }

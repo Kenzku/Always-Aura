@@ -56,6 +56,7 @@ define(['../../javascripts/room.js','../../javascripts/Constant.js'],function (R
                     var room = new Room();
                     room.comeIn(successCB_1,errorCB_1);
                 });
+
             }
         }
     }
