@@ -145,6 +145,7 @@ function LightActuator (configuration) {
             }else{
                 throw Constant.Error.Light.strength;
             }
+            return;
         }
 
         var aCouchDB = new CouchDB('room');

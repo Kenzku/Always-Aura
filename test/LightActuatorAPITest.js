@@ -280,7 +280,6 @@ test('switch light - switchLight()',function(done){
     aLightActuator.switchLight(Constant.room.id,successCB,errorCB);
 
     function successCB(result){
-        console.log(result);
         assert.ok(true);
         done();
     }
@@ -296,7 +295,6 @@ test('adjust luminance - self.adjustLuminance', function(done){
     aLightActuator.adjustLuminance(Constant.room.id,50,successCB,errorCB);
 
     function successCB(result){
-        console.log(result);
         assert.ok(true);
         done();
     }
@@ -362,7 +360,7 @@ test('adjust luminance - if strength = 0, light off',function(done){
 //mocha ./test/LightActuatorAPITest.js -R spec -u qunit -g 'strength should be limited'
 test('adjust luminance - strength should be limited - less than 0',function(done){
     var aLightActuator = new LightActuator({switchMode:Constant.ComponentSpec.default.switchMode.dimmer});
-    aLightActuator.adjustLuminance(Constant.room.id,-10,null,errorCB);
+    aLightActuator.adjustLuminance(Constant.room.id,-20,null,errorCB);
 
     function errorCB(err){
         assert.equal(err,Constant.Error.Light.strength);

@@ -16,7 +16,9 @@ test('Light - check light status',function(done){
     aLight.checkLightState(Constant.room.id,successCB,errorCB);
 
     function successCB (currentStatus){
-        expect(currentStatus).to.be.a('boolean');
+        expect(currentStatus).to.be.an('object');
+        expect(currentStatus.isLightOn).to.be.a('boolean');
+        expect(currentStatus.strength).to.be.within(0,100);
         done();
     }
 

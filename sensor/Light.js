@@ -29,7 +29,12 @@ function Light() {
         function successCB (body){
             if (body && body.hasOwnProperty('isLightOn')){
                 if(successCallback && typeof successCallback === 'function' ){
-                    successCallback(body.isLightOn);
+//                    successCallback(body.isLightOn);
+                    successCallback(
+                        {
+                            isLightOn:body.isLightOn,
+                            strength : body.strength
+                        });
                 }
             }else{
                 if (errorCallback && typeof errorCallback === 'function'){
