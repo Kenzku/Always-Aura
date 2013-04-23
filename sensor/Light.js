@@ -9,10 +9,10 @@ var Constant = require('../sensor/Constant');
 function Light() {
     var self = this;
     /**
-     *
+     * check light on/off status, this does not include strength value
      * @param roomId {String} the id of the room
-     * @param successCallback
-     * @param errorCallback
+     * @param successCallback (currentStatus) {boolean}
+     * @param errorCallback (error)
      */
     self.checkLightState = function (roomId, successCallback,errorCallback){
         if (!roomId || typeof roomId === 'function'){

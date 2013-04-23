@@ -99,12 +99,16 @@ exports.Error = {
     CouchDB : {
         read : 'read document error',
         update : 'update document error',
-        save : 'save document error'
+        save : 'save document error',
+        database : 'no database specified'
     },
     LightActuator : {
         room : 'no room id',
         strength : 'strength not specified',
         dimmer : 'does not support dimmer'
+    },
+    Light : {
+        strength: 'strength out of range'
     }
 }
 

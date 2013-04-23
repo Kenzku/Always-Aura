@@ -7,12 +7,21 @@ var nano = require('nano')('http://iot.cs.hut.fi:5984');
 var Constant = require('../sensor/Constant');
 
 function CouchDB (database) {
+    if (!database) {
+        throw Constant.Error.CouchDB.database;
+        return;
+    }
     var db = nano.use(database);
     var self = this;
     /**
      * read documents from couchDB
      * @param id {String} document id
      * @param successCallback(body), called when read succeed
+     * example body:
+     * { _id: '8361e3dfb52f0e28784c3cb53404477a',
+     * _rev: '35-f46481583c7fbda939ec2ba9ca79b381',
+     * isLightOn: true,
+     * strength: 60 }
      * @param errorCallback(error), called when read error
      */
     self.readDocument = function (id,successCallback,errorCallback) {

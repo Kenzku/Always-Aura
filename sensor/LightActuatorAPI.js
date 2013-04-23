@@ -57,6 +57,58 @@ function LightActuator (configuration) {
         }
     }
     /**
+     * switch the light on, ignore its current state
+     * @param lightId {String} the id of the light
+     * @param successCallback (body) update success body, information about the entry
+     * @param errorCallback (error)
+     */
+    self.switchOn = function (lightId, successCallback,errorCallback){
+        var aCouchDB = new CouchDB('room');
+        if (!lightId || typeof lightId === 'function'){
+            if (errorCallback && typeof errorCallback === 'function'){
+                errorCallback(Constant.Error.LightActuator.room);
+            }else{
+                throw Constant.Error.LightActuator.room;
+            }
+        }
+        aCouchDB.updateDocument(Constant.room.id,'isLightOn',
+            {isLightOn:Constant.ComponentSpec.default.switch.on},
+            successCallback, errorCallback);
+    }
+    /**
+     * switch the light off, ignore its current state;
+     * if the light actuator support dimmer, the strength will be set to 0,
+     * otherwise, strength will be ignored.
+     * @param lightId {String} the id of the light
+     * @param successCallback (body) update success body, information about the entry
+     * @param errorCallback (error)
+     */
+    self.switchOff = function (lightId, successCallback,errorCallback){
+        var aCouchDB = new CouchDB('room');
+        if (!lightId || typeof lightId === 'function'){
+            if (errorCallback && typeof errorCallback === 'function'){
+                errorCallback(Constant.Error.LightActuator.room);
+            }else{
+                throw Constant.Error.LightActuator.room;
+            }
+        }
+        // check if the component support dimmer
+        if (self.switchMode == 'dimmer'){
+            aCouchDB.updateDocument(Constant.room.id,'isLightOn',
+                {
+                    isLightOn:Constant.ComponentSpec.default.switch.off,
+                    strength:Constant.ComponentSpec.default.dimmer.strength
+                },
+                successCallback, errorCallback);
+        }else{
+            aCouchDB.updateDocument(Constant.room.id,'isLightOn',
+                {isLightOn:Constant.ComponentSpec.default.switch.off},
+                successCallback, errorCallback);
+        }
+
+    }
+
+    /**
      * update luminance
      * @param lightId {String} the id of the light
      * @param strength {Number} the strength of the luminance
@@ -68,6 +120,7 @@ function LightActuator (configuration) {
      * @param errorCallback (error)
      */
     self.adjustLuminance = function (lightId, strength, successCallback, errorCallback) {
+        // dimmer mode should be supported, otherwise throw error
         if (self.switchMode != Constant.ComponentSpec.default.switchMode.dimmer){
             if (errorCallback && typeof errorCallback === 'function'){
                 errorCallback(Constant.Error.LightActuator.dimmer);
@@ -75,6 +128,8 @@ function LightActuator (configuration) {
                 throw Constant.Error.LightActuator.dimmer;
             }
         }
+
+        // the strength should be a number, otherwise throw error
         if (strength.constructor !== Number) {
             if (errorCallback && typeof errorCallback === 'function'){
                 errorCallback(Constant.Error.LightActuator.strength);
@@ -82,8 +137,25 @@ function LightActuator (configuration) {
                 throw Constant.Error.LightActuator.strength;
             }
         }
+
+        // strength should be in the valid range otherwise throw error
+        if (strength < 0 || strength > 100) {
+            if (errorCallback && typeof errorCallback === 'function'){
+                errorCallback(Constant.Error.Light.strength);
+            }else{
+                throw Constant.Error.Light.strength;
+            }
+        }
+
         var aCouchDB = new CouchDB('room');
-        aCouchDB.updateDocument(Constant.room.id,'strength',{strength:parseInt(strength)},successCallback, errorCallback);
+        /* ---- HASN'T TESTED YET  ----*/
+        // if the strength is 0, update the light to off; otherwise on
+        var _strength = parseInt(strength);
+        if (_strength == 0) {
+            aCouchDB.updateDocument(Constant.room.id,null,{isLightOn:false,strength:_strength},successCallback, errorCallback);
+        }else{
+            aCouchDB.updateDocument(Constant.room.id,null,{isLightOn:true,strength:_strength},successCallback, errorCallback);
+        }
     }
 
     /**

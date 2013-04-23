@@ -8,6 +8,7 @@ var expect = require('chai').expect;
 var LightActuator = require('../sensor/LightActuatorAPI');
 var GenericComponent = require('../sensor/GenericComponentAPI');
 var Constant = require('../sensor/Constant');
+var CouchDB = require('../db/CouchDB');
 
 function ok(expr, msg) {
     if (!expr) throw new Error(msg);
@@ -302,6 +303,188 @@ test('adjust luminance - self.adjustLuminance', function(done){
 
     function errorCB(err){
         assert.ok(false,err);
+        done();
+    }
+});
+//mocha ./test/LightActuatorAPITest.js -R spec -u qunit -g 'if strength > 0, light on'
+test('adjust luminance - if strength > 0, light on',function(done){
+    var aLightActuator = new LightActuator({switchMode:Constant.ComponentSpec.default.switchMode.dimmer});
+    aLightActuator.adjustLuminance(Constant.room.id,60,successCB,errorCB);
+
+    function successCB(result){
+        expect(result).to.be.an('object');
+        expect(result).to.have.property('ok',true);
+        expect(result).to.have.property('id');
+
+        var aCouchDB = new CouchDB('room');
+        aCouchDB.readDocument(result.id,successCB_1,errorCB);
+    }
+
+    function errorCB(err){
+        assert.ok(false,err);
+        done();
+    }
+
+    function successCB_1(body){
+        assert.equal(body.isLightOn,true);
+        assert.equal(body.strength,60);
+        done();
+
+    }
+});
+//mocha ./test/LightActuatorAPITest.js -R spec -u qunit -g 'if strength = 0, light off'
+test('adjust luminance - if strength = 0, light off',function(done){
+    var aLightActuator = new LightActuator({switchMode:Constant.ComponentSpec.default.switchMode.dimmer});
+    aLightActuator.adjustLuminance(Constant.room.id,0,successCB,errorCB);
+
+    function successCB(body){
+        expect(body).to.be.an('object');
+        expect(body).to.have.property('ok',true);
+        expect(body).to.have.property('id');
+
+        var aCouchDB = new CouchDB('room');
+        aCouchDB.readDocument(body.id,successCB_1,errorCB);
+    }
+
+    function errorCB(err){
+        assert.ok(false,err);
+        done();
+    }
+
+    function successCB_1(body){
+        assert.equal(body.isLightOn,false);
+        assert.equal(body.strength,0);
+        done();
+
+    }
+});
+
+//mocha ./test/LightActuatorAPITest.js -R spec -u qunit -g 'strength should be limited'
+test('adjust luminance - strength should be limited - less than 0',function(done){
+    var aLightActuator = new LightActuator({switchMode:Constant.ComponentSpec.default.switchMode.dimmer});
+    aLightActuator.adjustLuminance(Constant.room.id,-10,null,errorCB);
+
+    function errorCB(err){
+        assert.equal(err,Constant.Error.Light.strength);
+        done();
+    }
+});
+
+test('adjust luminance - strength should be limited - greater than 100',function(done){
+    var aLightActuator = new LightActuator({switchMode:Constant.ComponentSpec.default.switchMode.dimmer});
+    aLightActuator.adjustLuminance(Constant.room.id,130,null,errorCB);
+
+    function errorCB(err){
+        assert.equal(err,Constant.Error.Light.strength);
+        done();
+    }
+});
+
+// mocha ./test/LightActuatorAPITest.js -R spec -u qunit -g 'Switch light on'
+test('Switch light on - dimmer - should be nothing to do with its mode',function(done){
+    var aLightActuator = new LightActuator({switchMode:Constant.ComponentSpec.default.switchMode.dimmer});
+    assert.equal(aLightActuator.switchMode,Constant.ComponentSpec.default.switchMode.dimmer);
+
+    aLightActuator.switchOn(Constant.room.id,successCB,errorCB);
+
+    function successCB (body){
+
+        expect(body).to.be.an('object');
+        expect(body).to.have.property('ok',true);
+        expect(body).to.have.property('id');
+
+        var aCouchDB = new CouchDB('room');
+        aCouchDB.readDocument(body.id,successCB_1,errorCB);
+    }
+
+    function errorCB(err){
+        assert.ok(false,err);
+        done();
+    }
+
+    function successCB_1 (body){
+        assert.equal(body.isLightOn,Constant.ComponentSpec.default.switch.on);
+        done();
+    }
+});
+
+test('Switch light on - onoff - should be nothing to do with its mode',function(done){
+    var aLightActuator = new LightActuator();
+    assert.equal(aLightActuator.switchMode,Constant.ComponentSpec.default.switchMode.onoff);
+
+    aLightActuator.switchOn(Constant.room.id,successCB,errorCB);
+
+    function successCB (body){
+        expect(body).to.be.an('object');
+        expect(body).to.have.property('ok',true);
+        expect(body).to.have.property('id');
+
+        var aCouchDB = new CouchDB('room');
+        aCouchDB.readDocument(body.id,successCB_1,errorCB);
+    }
+
+    function errorCB(err){
+        assert.ok(false,err);
+        done();
+    }
+
+    function successCB_1 (body){
+        assert.equal(body.isLightOn,Constant.ComponentSpec.default.switch.on);
+        done();
+    }
+});
+// mocha ./test/LightActuatorAPITest.js -R spec -u qunit -g 'Switch light off'
+test('Switch light off - dimmer - should effect its strength',function(done){
+    var aLightActuator = new LightActuator({switchMode:Constant.ComponentSpec.default.switchMode.dimmer});
+    assert.equal(aLightActuator.switchMode,Constant.ComponentSpec.default.switchMode.dimmer);
+
+    aLightActuator.switchOff(Constant.room.id,successCB,errorCB);
+
+    function successCB (body){
+
+        expect(body).to.be.an('object');
+        expect(body).to.have.property('ok',true);
+        expect(body).to.have.property('id');
+
+        var aCouchDB = new CouchDB('room');
+        aCouchDB.readDocument(body.id,successCB_1,errorCB);
+    }
+
+    function errorCB(err){
+        assert.ok(false,err);
+        done();
+    }
+
+    function successCB_1 (body){
+        assert.equal(body.isLightOn,Constant.ComponentSpec.default.switch.off);
+        assert.equal(body.strength,Constant.ComponentSpec.default.dimmer.strength); // should be both 0
+        done();
+    }
+});
+
+test('Switch light off - onoff - should have nothing to do with strength',function(done){
+    var aLightActuator = new LightActuator();
+    assert.equal(aLightActuator.switchMode,Constant.ComponentSpec.default.switchMode.onoff);
+
+    aLightActuator.switchOff(Constant.room.id,successCB,errorCB);
+
+    function successCB (body){
+
+        expect(body).to.be.an('object');
+        expect(body).to.have.property('ok',true);
+        expect(body).to.have.property('id');
+
+        var aCouchDB = new CouchDB('room');
+        aCouchDB.readDocument(body.id,successCB_1,errorCB);
+    }
+
+    function errorCB(err){
+        assert.ok(false,err);
+        done();
+    }
+
+    function successCB_1 (body){
+        assert.equal(body.isLightOn,Constant.ComponentSpec.default.switch.off);
         done();
     }
 });

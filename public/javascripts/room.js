@@ -103,7 +103,7 @@ function Room() {
             aLightActuatorAPI.adjustLuminance(self.sess,converter(),rpcSuccessCallback,rpcErrorCallback);
         });
         $(document).on('change','#dimmer',function(event){
-
+            // this will not effect CouchDB
             self.adjustLuminance(parseInt($('#dimmer').val()));
         });
         /**
