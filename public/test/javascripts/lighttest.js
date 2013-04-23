@@ -18,7 +18,9 @@ define(['../../javascripts/light.js',
                 }
 
                 function successCB_2(lightStatus){
-                    equal(typeof lightStatus, 'boolean');
+                    equal(typeof lightStatus, 'object');
+                    equal(typeof lightStatus.isLightOn, 'boolean');
+                    equal(lightStatus.strength >= 0 && lightStatus.strength <= 100, true);
                     start();
                 }
                 function errorCB (error){

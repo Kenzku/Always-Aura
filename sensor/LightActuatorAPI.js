@@ -45,13 +45,19 @@ function LightActuator (configuration) {
         }
         aLight.checkLightState(lightId,successCB_1, errorCallback);
 
-        // success callback to aCouchDB.readDocument
+        /**
+         * IMPORTANT: This function will effect the RPC API
+         * that the browser connects to
+         * success callback to aCouchDB.readDocument.
+         * @param {Object} lightStatus: {isLightOn: Boolean, strength: Number}
+         */
         function successCB_1 (lightStatus){
-            aCouchDB.updateDocument(Constant.room.id,'isLightOn',{isLightOn:!lightStatus},successCB_2, errorCallback);
+            aCouchDB.updateDocument(Constant.room.id,'isLightOn',{isLightOn:!lightStatus.isLightOn},
+                successCB_2, errorCallback);
             function successCB_2 (body) {
                 if (successCallback && typeof successCallback === 'function'){
                     // the new status: !lightStatus
-                    successCallback(!lightStatus);
+                    successCallback(!lightStatus.isLightOn);
                 }
             }
         }

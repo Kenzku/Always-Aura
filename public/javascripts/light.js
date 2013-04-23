@@ -48,8 +48,8 @@ function Light() {
     }
     /**
      * check the current light status
-     * @param rpcSuccessCallback (currentLightStatus) light status before switching,
-     * it is the current light status
+     * @param rpcSuccessCallback (Object : currentLightStatus) light status before switching,
+     * it is the current light status {isLightOn:Boolean, strength: Number}
      * @param rpcErrorCallback (error) the reason of error
      */
     self.lightStatus = function (rpcSuccessCallback, rpcErrorCallback){
@@ -64,7 +64,9 @@ function Light() {
             }
         }
     }
-
+    /**
+     * newStatus {Boolean} isLightOn | {Number} strength
+     */
     self.updateLightUI = function (newStatus){
         switch (typeof newStatus) {
             case 'boolean' :

@@ -17,7 +17,8 @@ function LightActuatorAPI () {
      * switch the light from on to off, or off to on
      * @param session {Object} WAMP session
      * @param onSwitchedLight (event) published by others who subscribe 'room:lightStatus'
-     * @param rpcSuccessCallback (newLightStatus) light status after switching
+     * @param rpcSuccessCallback (Object : newLightStatus) light status after switching
+     * e.g. lightStatus: {isLightOn: Boolean, strength: Number}
      * @param rpcErrorCallback (error) the reason of error
      */
     self.switchLight = function (session,onSwitchedLight,rpcSuccessCallback,rpcErrorCallback) {

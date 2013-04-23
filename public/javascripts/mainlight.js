@@ -16,9 +16,9 @@ require(['light','constant'],function(Light,CONSTANT){
     function successCB_1(){
         aLight.lightStatus(successCB_2,errorCB);
     }
-
+    // lightStatus: {isLightOn: Boolean, strength: Number}
     function successCB_2(lightStatus){
-        aLight.updateLightUI(lightStatus);
+        aLight.updateLightUI(lightStatus.isLightOn);
     }
     function errorCB (error){
         console.log(error);
