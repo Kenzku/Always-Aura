@@ -3,8 +3,7 @@
  * Date: 16/04/2013
  * Time: 20:24
  */
-define(['../../javascripts/light.js',
-        '../../javascripts/room.js'],function(Light,Room){
+define(['../../javascripts/light.js'],function(Light){
     return {
         RunTests : function(){
             module('Light Status');
@@ -28,7 +27,6 @@ define(['../../javascripts/light.js',
                     start();
                 }
                 function onLightStatusChange (topic, event){
-                    console.log(event);
                     equal(Object.prototype.toString.call(event),'[object Array]');
                     if (event[0] == 'message'){
                         /**

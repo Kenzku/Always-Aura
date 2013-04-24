@@ -5,7 +5,7 @@
  */
 define(['../javascripts/api/lightactuatorapi.js',
     '../javascripts/initwamp.js',
-    '../javascripts/Constant.js'],function(LightActuatorAPI,init){
+    '../javascripts/Constant.js'],function(LightActuatorAPI,init,CONSTANT){
  return Light;
 });
 

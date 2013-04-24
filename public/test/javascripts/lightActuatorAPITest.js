@@ -201,7 +201,8 @@ define(['../../javascripts/api/lightactuatorapi.js',
                     }
 
                     function errorCB(error){
-                        ok(false, error);
+                        console.log(error);
+                        ok(false, error); // Object would not display
                         start();
                     }
 

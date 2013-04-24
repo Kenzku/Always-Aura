@@ -16,7 +16,8 @@ define(['../../javascripts/room.js','../../javascripts/Constant.js'],function (R
 
                     function errorCB (err) {
                         // if put assert here will cause error when exit the server
-                        console.log(err);
+                        ok(false,err);
+                        start();
                     }
 
                     var room = new Room();
@@ -49,7 +50,7 @@ define(['../../javascripts/room.js','../../javascripts/Constant.js'],function (R
                     function onSwitchedLight(topicUri, data) {
                         equal(Object.prototype.toString.call(data),'[object Array]');
                         equal(data[0],'Light Status');
-                        equal(topicUri,CONSTANT.WAMP.TOPIC.LIGHT_STATUS)
+                        equal(topicUri,CONSTANT.WAMP.TOPIC.LIGHT_STATUS);
                         start();
                     }
 
