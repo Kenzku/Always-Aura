@@ -8,7 +8,13 @@ define(['../../javascripts/light.js'],function(Light){
         RunTests : function(){
             module('Light Status');
 
-            asyncTest('check the light in the room status',function(){
+            /**
+             * separate two parts,
+             * because `onLightStatusChange` in `init` and
+             * `successCB_2` in `aLight.lightStatus`
+             * are timing conflicted
+             */
+            asyncTest('check the light in the room status - 1',function(){
                 var aLight = new Light();
                 aLight.init(onLightStatusChange,successCB_1,errorCB);
 
@@ -26,6 +32,24 @@ define(['../../javascripts/light.js'],function(Light){
                     ok(false,error);
                     start();
                 }
+
+                function onLightStatusChange (topic, event){
+                    // nothing here
+                }
+            });
+
+            asyncTest('check the light in the room status - 2',function(){
+                var aLight = new Light();
+                aLight.init(onLightStatusChange,successCB_1,errorCB);
+
+                function successCB_1(){
+                    aLight.lightStatus(null,errorCB);
+                }
+
+                function errorCB (error){
+                    ok(false,error);
+                    start();
+                }
                 function onLightStatusChange (topic, event){
                     equal(Object.prototype.toString.call(event),'[object Array]');
                     if (event[0] == 'message'){
@@ -37,8 +61,9 @@ define(['../../javascripts/light.js'],function(Light){
                     }else{
                         equal(event[0],'Light Status');
                     }
+                    start();
                 }
             });
         }
-    };
+    }
 });

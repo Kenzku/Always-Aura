@@ -57,6 +57,14 @@ define(function(){
            }
        },
 
+       SUN : {
+           IS_CONTINUED : true,
+           TIME_INTERVAL : 800,
+           IS_SUN_RISE : true,
+           SUN_RISE : true,
+           SUN_SET : false
+       },
+
        ERROR : {
            LIGHT : {
                LIGHT_STATUS : 'Haven\'t init the light'
