@@ -15,7 +15,8 @@ require(['sun'],function(Sun){
     theSun.init(successCB,errorCB);
 
     function successCB(session) {
-        theSun.sunPeriod();
+        var aSunPeriod = new theSun.SunPeriod();
+        aSunPeriod.start();
     }
     function errorCB (err) {
         console.log(err);

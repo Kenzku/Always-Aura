@@ -35,7 +35,6 @@ function Sun(){
             }
         }
     }
-
     self.SunPeriod = function () {
         var _self = this;
 
@@ -43,6 +42,8 @@ function Sun(){
         _self.isContinued = CONSTANT.SUN.IS_CONTINUED;
         _self.timeInterval = CONSTANT.SUN.TIME_INTERVAL;
         _self.isSunRise = CONSTANT.SUN.IS_SUN_RISE;
+
+        _self.aLightActuatorAPI = new LightActuatorAPI();
 
         /**
          * start the sun period
@@ -63,9 +64,9 @@ function Sun(){
                 } else {
                     _self.sunSet(sunBurst);
                 }
-
-                callback(_self.sunBurstConverter(sunBurst));
-
+                if (callback && typeof callback === 'function'){
+                    callback(_self.sunBurstConverter(sunBurst));
+                }
                 if (!_self.isContinued) {
                     clearInterval(sunPeriodInterval);
                 }
@@ -79,6 +80,10 @@ function Sun(){
             if (sunBurst < 9 && sunBurst >= 0) {
                 var _sunBurst = (sunBurst + 1.5) / 10;
                 $('.sunburst b').css('opacity', _sunBurst);
+                if (self.sess){
+                    _self.aLightActuatorAPI.adjust(self.sess,_self.lightBrightnessConverter(_sunBurst));
+
+                }
             } else if (sunBurst == 9 ) {
                 _self.isSunRise = CONSTANT.SUN.SUN_SET;
             } else {
@@ -93,6 +98,10 @@ function Sun(){
             if (sunBurst <= 10 && sunBurst > 0) {
                 var _sunBurst = ( sunBurst - 1 )/ 10;
                 $('.sunburst b').css('opacity', _sunBurst);
+                if (self.sess){
+                    _self.aLightActuatorAPI.adjust(self.sess,_self.lightBrightnessConverter(_sunBurst));
+
+                }
             }else if (sunBurst == 0 ) {
                 _self.isSunRise = CONSTANT.SUN.SUN_RISE;
             } else {
@@ -132,11 +141,19 @@ function Sun(){
             return sunBurst;
         }
 
+        _self.lightBrightnessConverter = function (sunBurst) {
+            sunBurst = 30 - (sunBurst * 30);
+            return sunBurst;
+        }
+
         _self.reset = function () {
             _self.isContinued = CONSTANT.SUN.IS_CONTINUED;
             _self.timeInterval = CONSTANT.SUN.TIME_INTERVAL;
             _self.isSunRise = CONSTANT.SUN.IS_SUN_RISE;
+
+            _self.aLightActuatorAPI = new LightActuatorAPI();
         }
     }
+
 
 }

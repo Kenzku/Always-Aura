@@ -69,26 +69,26 @@ function Room() {
          * @param data {Boolean} light status after switching
          */
         function rpcSuccessCallback (data) {
-            console.log("I am switching the light!");
             // exclude me: according to the standard
-            self.sess.publish("room:lightStatus",
-                {
-                'turnLightTo': data
-                },
-                true);
+//            self.sess.publish("room:lightStatus",
+//                {
+//                'turnLightTo': data
+//                },
+//                true);
+            aLightActuatorAPI.adjust(self.sess,data);
             if (successCallback && typeof successCallback === 'function'){
                 successCallback(data);
             }
         }
     }
     // it seems I do not need to subscribe the topic before publish
-    self.adjustLuminance = function(data){
-        self.sess.publish("room:lightStatus",
-            {
-             'turnLightTo': data
-            },
-            true);
-    }
+//    self.adjustLuminance = function(data){
+//        self.sess.publish("room:lightStatus",
+//            {
+//             'turnLightTo': data
+//            },
+//            true);
+//    }
 
     self.switchUI = function (onSwitchedLight, successCallback, errorCallback){
         $(document).on('click','#lightSwitch',self.switchLight);
@@ -104,7 +104,7 @@ function Room() {
         });
         $(document).on('change','#dimmer',function(event){
             // this will not effect CouchDB
-            self.adjustLuminance(parseInt($('#dimmer').val()));
+            aLightActuatorAPI.adjust(self.sess,parseInt($('#dimmer').val()));
         });
         /**
          * because of UI simulation only ranging from 0 to 30

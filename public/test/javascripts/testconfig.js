@@ -18,6 +18,6 @@ require(['roomtest','lighttest','lightactuatortest','suntest'], function (roomte
 //        roomtest.RunTests();
 //        lighttest.RunTests();
 //        lightactuatortest.RunTests();
-//        suntest.RunTests();
+        suntest.RunTests();
     }
 );

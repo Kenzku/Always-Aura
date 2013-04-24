@@ -27,6 +27,7 @@ require(['light','constant'],function(Light,CONSTANT){
         if (topic == CONSTANT.WAMP.TOPIC.LIGHT_STATUS &&
             Object.prototype.toString.call(event) == '[object Array]' &&
             event.length == 4){
+            console.log(event[2].turnLightTo);
             aLight.updateLightUI(event[2].turnLightTo);
         }
     }

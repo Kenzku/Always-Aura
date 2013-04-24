@@ -38,8 +38,23 @@ function LightActuatorAPI () {
     self.lightStatus = function (session, rpcSuccessCallback, rpcErrorCallback){
         session.call('room:LightStatus').then(rpcSuccessCallback,rpcErrorCallback);
     }
+
     /**
-     * adjust luminance
+     * adjust the light's on/ff status or luminance,
+     * without changing the the state in CouchDB.
+     * The purpose is for simulation
+     * @param session {Object} WAMP session
+     * @param data {Number} | {Boolean} change the light luminance or on/off status
+     */
+    self.adjust = function(session, data){
+        session.publish("room:lightStatus",
+            {
+                'turnLightTo': data
+            },
+            true);
+    }
+    /**
+     * adjust luminance and set state on CouchDB
      * @param session {Object} WAMP session
      * @param strength {Number}
      * @param rpcSuccessCallback (body) the update succeed body check under layer API: adjustLuminance
