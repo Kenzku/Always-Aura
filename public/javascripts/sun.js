@@ -22,6 +22,7 @@ function Sun(){
         function successCB(session){
             self.sess = session;
             self.sess.prefix("room", "http://"+CONSTANT.DOMAIN + ":" + CONSTANT.PORT +  "/room#");
+            self.sess.prefix("sun", "http://"+CONSTANT.DOMAIN + ":" + CONSTANT.PORT +  "/sun#");
             if (successCallback && typeof successCallback === 'function'){
                 successCallback (session);
             }
@@ -35,6 +36,13 @@ function Sun(){
             }
         }
     }
+    /**
+     * start sunrise and sunset simulation.
+     * to do this, you need to call start and configuration if needed.
+     * Without Sun initialisation, the publish event in sunRise(sunBurst) and
+     * sunSet(sunBurst) will not work.
+     * @constructor
+     */
     self.SunPeriod = function () {
         var _self = this;
 
@@ -42,8 +50,6 @@ function Sun(){
         _self.isContinued = CONSTANT.SUN.IS_CONTINUED;
         _self.timeInterval = CONSTANT.SUN.TIME_INTERVAL;
         _self.isSunRise = CONSTANT.SUN.IS_SUN_RISE;
-
-        _self.aLightActuatorAPI = new LightActuatorAPI();
 
         /**
          * start the sun period
@@ -81,7 +87,7 @@ function Sun(){
                 var _sunBurst = (sunBurst + 1.5) / 10;
                 $('.sunburst b').css('opacity', _sunBurst);
                 if (self.sess){
-                    _self.aLightActuatorAPI.adjust(self.sess,_self.lightBrightnessConverter(_sunBurst));
+                    _self.adjust(self.sess,_self.lightBrightnessConverter(_sunBurst));
 
                 }
             } else if (sunBurst == 9 ) {
@@ -99,7 +105,7 @@ function Sun(){
                 var _sunBurst = ( sunBurst - 1 )/ 10;
                 $('.sunburst b').css('opacity', _sunBurst);
                 if (self.sess){
-                    _self.aLightActuatorAPI.adjust(self.sess,_self.lightBrightnessConverter(_sunBurst));
+                    _self.adjust(self.sess,_self.lightBrightnessConverter(_sunBurst));
 
                 }
             }else if (sunBurst == 0 ) {
@@ -109,6 +115,10 @@ function Sun(){
             }
         }
 
+        /**
+         * Configure a sun period
+         * @param options
+         */
         _self.config = function (options) {
             for (var option in options){
                 switch (option) {
@@ -128,6 +138,15 @@ function Sun(){
             }
         }
 
+        /**
+         * convert the opacity of element '.sunburst b' into
+         * the value that sunRise(sunBurst) and sunSet(sunBurst)
+         * can use
+         * @param sunBurst [0,1] in the simulation,
+         * it is the opacity of element '.sunburst b'
+         * @returns {Integer} the value that sunRise(sunBurst) and sunSet(sunBurst)
+         * can use
+         */
         _self.sunBurstConverter = function (sunBurst) {
             if (sunBurst > 0 && sunBurst < 1) {
                 sunBurst = parseInt(sunBurst * 10);
@@ -141,17 +160,41 @@ function Sun(){
             return sunBurst;
         }
 
+        /**
+         * convert sun burst brightness into light brightness
+         * @param sunBurst [0,1] in the simulation,
+         * it is the opacity of element '.sunburst b'
+         * @returns {number} the brightness value that the light can use [0,30]
+         */
         _self.lightBrightnessConverter = function (sunBurst) {
             sunBurst = 30 - (sunBurst * 30);
             return sunBurst;
         }
 
+        /**
+         * reset a sun period
+         */
         _self.reset = function () {
             _self.isContinued = CONSTANT.SUN.IS_CONTINUED;
             _self.timeInterval = CONSTANT.SUN.TIME_INTERVAL;
             _self.isSunRise = CONSTANT.SUN.IS_SUN_RISE;
 
             _self.aLightActuatorAPI = new LightActuatorAPI();
+        }
+
+        /**
+         * adjust the light's brightness,
+         * without changing the the state in CouchDB.
+         * The purpose is for simulation
+         * @param session {Object} WAMP session
+         * @param data {Number} the brightness value that the light can use [0,30]
+         */
+        _self.adjust = function(session, data){
+            session.publish(CONSTANT.WAMP.TOPIC.SUN,
+                {
+                    'turnLightTo': data
+                },
+                true);
         }
     }
 

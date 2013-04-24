@@ -13,6 +13,8 @@ function Light() {
     var self = this;
 
     self.sess = null;
+
+    self.currentLightStatus = null;
     /**
      * establish a WAMP connection with the server, and subscribe the default
      * topic: "room:lightStatus"
@@ -21,10 +23,11 @@ function Light() {
      * who subscribe the same channel has published a message. In this case,
      * the client should be the room, who has the switch.
      * the data structure is {'turnLightTo': data}
+     * @param onSunStatusChange (strength)
      * @param successCallback (session) called when init is successfully done
      * @param errorCallback (error) called when an error happen
      */
-    self.init = function(onLightStatusChange, successCallback, errorCallback){
+    self.init = function(onLightStatusChange, onSunStatusChange, successCallback, errorCallback){
         // init WAMP connection
         init(successCB,errorCB);
 
@@ -32,7 +35,11 @@ function Light() {
         function successCB(session){
             self.sess = session;
             self.sess.prefix("room", "http://"+CONSTANT.DOMAIN + ":" + CONSTANT.PORT +  "/room#");
-            self.sess.subscribe("room:lightStatus", onLightStatusChange);
+            self.sess.prefix("sun", "http://"+CONSTANT.DOMAIN + ":" + CONSTANT.PORT +  "/sun#");
+
+            self.sess.subscribe(CONSTANT.WAMP.TOPIC.LIGHT_STATUS, onLightStatusChange);
+//            self.senseSun(onSunStatusChange);
+
             if (successCallback && typeof successCallback === 'function'){
                 successCallback (session);
             }
@@ -77,7 +84,6 @@ function Light() {
         }
 
         function onOffMode(newStatus) {
-            console.log(newStatus);
             $('body').removeAttr('style');
             if (newStatus) {
                 $('body').attr('class', 'lightOn');
@@ -100,5 +106,13 @@ function Light() {
                 $('p').attr('class', 'textLightOff')
             }
         }
+    }
+
+    self.doNotSenseSun = function(){
+        self.sess.unsubscribe(CONSTANT.WAMP.TOPIC.SUN);
+    }
+
+    self.senseSun = function(onSunStatusChange){
+        self.sess.subscribe(CONSTANT.WAMP.TOPIC.SUN, onSunStatusChange);
     }
 }

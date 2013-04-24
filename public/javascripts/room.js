@@ -70,25 +70,12 @@ function Room() {
          */
         function rpcSuccessCallback (data) {
             // exclude me: according to the standard
-//            self.sess.publish("room:lightStatus",
-//                {
-//                'turnLightTo': data
-//                },
-//                true);
             aLightActuatorAPI.adjust(self.sess,data);
             if (successCallback && typeof successCallback === 'function'){
                 successCallback(data);
             }
         }
     }
-    // it seems I do not need to subscribe the topic before publish
-//    self.adjustLuminance = function(data){
-//        self.sess.publish("room:lightStatus",
-//            {
-//             'turnLightTo': data
-//            },
-//            true);
-//    }
 
     self.switchUI = function (onSwitchedLight, successCallback, errorCallback){
         $(document).on('click','#lightSwitch',self.switchLight);

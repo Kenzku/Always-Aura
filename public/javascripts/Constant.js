@@ -14,7 +14,8 @@ define(function(){
            },
            TOPIC : {
                LIGHT_STATUS : 'room:lightStatus',
-               SWITCH_LIGHT : 'actuator:switchLight'
+               SWITCH_LIGHT : 'actuator:switchLight',
+               SUN : 'sun:sunBrightness'
            }
        },
 
