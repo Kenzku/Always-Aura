@@ -3,9 +3,11 @@
  * Date: 16/04/2013
  * Time: 20:24
  */
-define(['../../javascripts/light.js'],function(Light){
+/*global define, asyncTest, deepEqual, start, ok, equal*/
+define(['../../javascripts/light.js'], function (Light) {
+    "use strict";
     return {
-        RunTests : function(){
+        RunTests : function () {
             module('Light Status');
 
             /**
@@ -14,87 +16,80 @@ define(['../../javascripts/light.js'],function(Light){
              * `successCB_2` in `aLight.lightStatus`
              * are timing conflicted
              */
-            asyncTest('check the light in the room status - 1',function(){
+            asyncTest('check the light in the room status - 1', function () {
                 var aLight = new Light();
-                aLight.init(onLightStatusChange,null,successCB_1,errorCB);
-
-                function successCB_1(){
-                    aLight.lightStatus(successCB_2,errorCB);
-                }
-
-                function successCB_2(lightStatus){
+                function successCB_2(lightStatus) {
                     equal(typeof lightStatus, 'object');
                     equal(typeof lightStatus.isLightOn, 'boolean');
                     equal(lightStatus.strength >= 0 && lightStatus.strength <= 100, true);
                     start();
                 }
-                function errorCB (error){
-                    ok(false,error);
+                function errorCB(error) {
+                    ok(false, error);
                     start();
                 }
-
-                function onLightStatusChange (topic, event){
+                function successCB_1() {
+                    aLight.lightStatus(successCB_2, errorCB);
+                }
+                function onLightStatusChange(topic, event) {
                     // nothing here
                 }
+                aLight.init(onLightStatusChange, null, successCB_1, errorCB);
             });
 
-            asyncTest('check the light in the room status - 2',function(){
+            asyncTest('check the light in the room status - 2', function () {
                 var aLight = new Light();
-                aLight.init(onLightStatusChange,null,successCB_1,errorCB);
-
-                function successCB_1(){
-                    aLight.lightStatus(null,errorCB);
-                }
-
-                function errorCB (error){
-                    ok(false,error);
+                function errorCB(error) {
+                    ok(false, error);
                     start();
                 }
-                function onLightStatusChange (topic, event){
-                    equal(Object.prototype.toString.call(event),'[object Array]');
-                    if (event[0] == 'message'){
+                function successCB_1() {
+                    aLight.lightStatus(null, errorCB);
+                }
+                function onLightStatusChange(topic, event) {
+                    equal(Object.prototype.toString.call(event), '[object Array]');
+                    if (event[0] === 'message') {
                         /**
                          * because for protocol reason,
                          * this will also receive the first establish message
                          */
                         ok(true);
-                    }else{
-                        equal(event[0],'Light Status');
+                    } else {
+                        equal(event[0], 'Light Status');
                     }
                     start();
                 }
+                aLight.init(onLightStatusChange, null, successCB_1, errorCB);
             });
 
-            asyncTest('check the light in the room status - 3',function(){
+            asyncTest('check the light in the room status - 3', function () {
                 var aLight = new Light();
-                aLight.init(onLightStatusChange,onSunStatusChange,successCB_1,errorCB);
-
-                function successCB_1(){
-                    aLight.lightStatus(null,errorCB);
-                }
-
-                function errorCB (error){
-                    ok(false,error);
+                function errorCB(error) {
+                    ok(false, error);
                     start();
                 }
-                function onSunStatusChange (topic, event){
-                    equal(Object.prototype.toString.call(event),'[object Array]');
-                    if (event[0] == 'message'){
+                function successCB_1() {
+                    aLight.lightStatus(null, errorCB);
+                }
+                function onSunStatusChange(topic, event) {
+                    equal(Object.prototype.toString.call(event), '[object Array]');
+                    if (event[0] === 'message') {
                         /**
                          * because for protocol reason,
                          * this will also receive the first establish message
                          */
                         ok(true);
-                    }else{
-                        equal(event[0],'Light Status');
+                    } else {
+                        equal(event[0], 'Light Status');
                     }
                     start();
                 }
 
-                function onLightStatusChange (topic, event){
+                function onLightStatusChange(topic, event) {
                     // nothing here
                 }
+                aLight.init(onLightStatusChange, onSunStatusChange, successCB_1, errorCB);
             });
         }
-    }
+    };
 });
