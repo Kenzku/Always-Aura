@@ -45,5 +45,3 @@ To sreve the application you need a server running Node.js with NPM installed. S
 
 * Light and Room First Demo
     http://www.youtube.com/watch?v=4UlWY4956e4
-
-
