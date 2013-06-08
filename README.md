@@ -45,3 +45,5 @@ To sreve the application you need a server running Node.js with NPM installed. S
 
 * Light and Room First Demo
     http://www.youtube.com/watch?v=4UlWY4956e4
+* Constant Light Luminance level: http://www.youtube.com/watch?v=xT5Of7xJjDs
+* Exclusive to Aalto stuff for further research
