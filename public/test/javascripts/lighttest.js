@@ -41,7 +41,7 @@ define(['../../javascripts/light.js'], function (Light) {
                 var aLight = new Light();
                 function errorCB(error) {
                     ok(false, error);
-                    start();
+//                    start();
                 }
                 function successCB_1() {
                     aLight.lightStatus(null, errorCB);
@@ -57,7 +57,7 @@ define(['../../javascripts/light.js'], function (Light) {
                     } else {
                         equal(event[0], 'Light Status');
                     }
-                    start();
+//                    start();
                 }
                 aLight.init(onLightStatusChange, null, successCB_1, errorCB);
             });

@@ -3,12 +3,11 @@
  * Date: 10/04/2013
  * Time: 11:39
  */
-/*global define*/
-define(['../javascripts/autobahn.js'], function (ab) {
+/*global define, ab*/
+define(function () {
     "use strict";
     function init(successCallback, errorCallback) {
         var PORT = "3000";
-
         // connect to WAMP server
         ab.connect("ws://localhost:" + PORT,
 

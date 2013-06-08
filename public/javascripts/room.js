@@ -4,7 +4,7 @@
  * Time: 11:52
  */
 /*global define*/
-define(['jqeury',
+define(['jquery',
         '../javascripts/api/lightactuatorapi.js',
         '../javascripts/initwamp.js',
         '../javascripts/api/componentapi.js',

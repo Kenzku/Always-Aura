@@ -3,10 +3,9 @@
  * Date: 10/04/2013
  * Time: 13:31
  */
-/*global define, asyncTest, deepEqual, start, ok, equal*/
+/*global define, asyncTest, deepEqual, start, ok, equal, ab*/
 define(['../../javascripts/room.js',
-        '../../javascripts/Constant.js',
-        '../../javascripts/autobahn.js'], function (Room, CONSTANT, ab) {
+        '../../javascripts/Constant.js'], function (Room, CONSTANT) {
     "use strict";
     return {
         RunTests: function () {

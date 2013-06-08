@@ -3,11 +3,10 @@
  * Date: 23/04/2013
  * Time: 15:39
  */
-/*global define, asyncTest, deepEqual, start, ok, equal, test*/
-define(['jqeury',
+/*global define, asyncTest, deepEqual, start, ok, equal, test, ab*/
+define(['jquery',
         '../../javascripts/sun.js',
-        '../../javascripts/Constant.js',
-        '../../javascripts/autobahn.js'], function ($, Sun, CONSTANT, ab) {
+        '../../javascripts/Constant.js'], function ($, Sun, CONSTANT) {
     "use strict";
     return {
         RunTests : function () {
@@ -34,14 +33,16 @@ define(['jqeury',
                 var i,
                     sunBurst,
                     sunBurst_new,
+                    sunBurst_ori,
                     theSun = new Sun(),
                     aSunPeriod = new theSun.SunPeriod();
 
                 $('.sunburst b').css('opacity', 0);
                 // NOTE : the 9th time should go to sunset, so here set to 8
                 for (i = 0; i < 8; i += 1) {
+                    // type is number
                     sunBurst = Math.abs($('.sunburst b').css('opacity'));
-
+                    sunBurst_ori = sunBurst;
                     // make sure sunBurst is in range
                     sunBurst = aSunPeriod.sunBurstConverter(sunBurst);
 
@@ -52,8 +53,8 @@ define(['jqeury',
                     sunBurst_new = Math.abs($('.sunburst b').css('opacity'));
 
                     sunBurst_new = aSunPeriod.sunBurstConverter(sunBurst_new);
-                    sunBurst = aSunPeriod.sunBurstConverter(sunBurst);
-                    equal(sunBurst < sunBurst_new, true);
+                    sunBurst_ori = aSunPeriod.sunBurstConverter(sunBurst_ori);
+                    equal(sunBurst_ori < sunBurst_new, true);
                 }
 
             });
@@ -62,13 +63,14 @@ define(['jqeury',
                 var i,
                     sunBurst,
                     sunBurst_new,
+                    sunBurst_ori,
                     theSun = new Sun(),
                     aSunPeriod = new theSun.SunPeriod();
 
                 $('.sunburst b').css('opacity', 1);
                 for (i = 0; i < 8; i += 1) {
                     sunBurst = Math.abs($('.sunburst b').css('opacity'));
-
+                    sunBurst_ori = sunBurst;
                     // make sure sunBurst is in range
                     sunBurst = aSunPeriod.sunBurstConverter(sunBurst);
                     // sun rise
@@ -78,8 +80,8 @@ define(['jqeury',
                     sunBurst_new = Math.abs($('.sunburst b').css('opacity'));
 
                     sunBurst_new = aSunPeriod.sunBurstConverter(sunBurst_new);
-                    sunBurst = aSunPeriod.sunBurstConverter(sunBurst);
-                    equal(sunBurst > sunBurst_new, true);
+                    sunBurst_ori = aSunPeriod.sunBurstConverter(sunBurst_ori);
+                    equal(sunBurst_ori > sunBurst_new, true);
                 }
             });
 

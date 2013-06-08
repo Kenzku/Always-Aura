@@ -4,7 +4,7 @@
  * Time: 17:49
  */
 /*global define*/
-define(['jqeury',
+define(['jquery',
         '../javascripts/api/lightactuatorapi.js',
         '../javascripts/initwamp.js',
         '../javascripts/Constant.js'], function ($, LightActuatorAPI, init, CONSTANT) {
