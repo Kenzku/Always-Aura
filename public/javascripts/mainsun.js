@@ -9,16 +9,15 @@ require.config({
     }
 });
 
-require(['sun'],function(Sun){
+require(['sun'], function (Sun) {
+    "use strict";
     var theSun = new Sun();
-
-    theSun.init(successCB,errorCB);
-
     function successCB(session) {
         var aSunPeriod = new theSun.SunPeriod();
         aSunPeriod.start();
     }
-    function errorCB (err) {
+    function errorCB(err) {
         console.log(err);
     }
+    theSun.init(successCB, errorCB);
 });
