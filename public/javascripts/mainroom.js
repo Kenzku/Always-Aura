@@ -23,7 +23,7 @@ require(['room'],function(){
 
     // switch light callback
     function rpcSuccessCB_2 (data){
-        console.log("rpcSuccessCB_2: " + data);
+        console.log("rpcSuccessCB_2: ");
     }
 
     function errorCB_2 (err) {

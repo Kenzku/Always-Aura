@@ -28,19 +28,21 @@ require(['light','constant'],function(Light,CONSTANT){
         console.log(error);
     }
     function onLightStatusChange(topic, event) {
-
         if (topic == CONSTANT.WAMP.TOPIC.LIGHT_STATUS &&
             Object.prototype.toString.call(event) == '[object Array]' &&
             event.length == 4){
-            console.log(typeof event[2].turnLightTo)
 
             if(typeof event[2].turnLightTo === 'boolean'){
+
                 aLight.currentLightStatus = event[2].turnLightTo;
+                console.log('onLightStatusChange: ' + aLight.currentLightStatus);
 
                 if(aLight.currentLightStatus){
                     // light on
+                    console.log('sub');
                     aLight.senseSun(onSunStatusChange);
                 }else{
+                    console.log('unsub');
                     aLight.doNotSenseSun();
                 }
             }
@@ -52,7 +54,7 @@ require(['light','constant'],function(Light,CONSTANT){
         if (topic == CONSTANT.WAMP.TOPIC.SUN &&
             Object.prototype.toString.call(event) == '[object Array]' &&
             event.length == 4){
-
+            console.log(aLight.currentLightStatus);
             if(aLight.currentLightStatus){
                 aLight.updateLightUI(event[2].turnLightTo);
             }

@@ -48,3 +48,36 @@ p, #dimmer {
     font-family: 'Lato', sans-serif;
     font-size: 20px;
 }
+
+.line {
+    position : fixed;
+    height: 3px;
+    background: #000000;
+
+    transform-origin: 0% 100%;
+    -webkit-transform-origin: 0% 100%;
+}
+
+#lowerLeft {
+    left: 0px;
+    bottom: 0px;
+    transform: rotate(-45deg);
+    -webkit-transform: rotate(-45deg);
+    width: 500px;
+}
+
+#lowerRight {
+    bottom: 0px;
+    right: 0px;
+    transform: rotate(-135deg);
+    -webkit-transform: rotate(-135deg);
+    width: 500px;
+}
+
+#upperLeft {
+    top: 0px;
+    left: 425px;
+    transform: rotate(90deg);
+    -webkit-transform: rotate(90deg);
+    width: 500px;
+}

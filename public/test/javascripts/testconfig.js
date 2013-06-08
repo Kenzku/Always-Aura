@@ -16,8 +16,8 @@ require(['roomtest','lighttest','lightactuatortest','suntest'], function (roomte
         QUnit.start();
         // run one by one
 //        roomtest.RunTests();
-//        lighttest.RunTests();
+        lighttest.RunTests();
 //        lightactuatortest.RunTests();
-        suntest.RunTests();
+//        suntest.RunTests();
     }
 );

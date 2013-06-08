@@ -65,9 +65,9 @@ define(['../../javascripts/light.js'],function(Light){
                 }
             });
 
-            asyncTest('check the light in the room status - 2',function(){
+            asyncTest('check the light in the room status - 3',function(){
                 var aLight = new Light();
-                aLight.init(null,onSunStatusChange,successCB_1,errorCB);
+                aLight.init(onLightStatusChange,onSunStatusChange,successCB_1,errorCB);
 
                 function successCB_1(){
                     aLight.lightStatus(null,errorCB);
@@ -89,6 +89,10 @@ define(['../../javascripts/light.js'],function(Light){
                         equal(event[0],'Light Status');
                     }
                     start();
+                }
+
+                function onLightStatusChange (topic, event){
+                    // nothing here
                 }
             });
         }
