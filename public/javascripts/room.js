@@ -18,9 +18,9 @@ define(['jqeury',
         self.comeIn = function (successCallback, errorCallback) {
             /**
              * when successfully initialise the component
-             * @param res {String} rpc callback value
+             * possible parameter: res {String} rpc callback value
              */
-            function onSwitchReady(res) {
+            function onSwitchReady() {
                 if (successCallback && typeof successCallback === 'function') {
                     successCallback(self.sess);
                 }
@@ -70,8 +70,8 @@ define(['jqeury',
             }
             aLightActuatorAPI.switchLight(self.sess, onSwitchedLight, rpcSuccessCallback, errorCallback);
         };
-
-        self.switchUI = function (onSwitchedLight, successCallback, errorCallback) {
+        // possible parameters: onSwitchedLight, successCallback, errorCallback
+        self.switchUI = function () {
             $(document).on('click', '#lightSwitch', self.switchLight);
         };
 
@@ -88,12 +88,13 @@ define(['jqeury',
                 /*jslint nomen: false*/
                 return parseInt(strength, 10);
             }
-            // for efficiency, final state only
-            $(document).on('mouseup', '#dimmer', function (event) {
-                // set On/off status on CouchDB
+            // for efficiency, final state only; parameter: event
+            $(document).on('mouseup', '#dimmer', function () {
+                // set On/ofaf status on CouchDB
                 aLightActuatorAPI.adjustLuminance(self.sess, converter(), rpcSuccessCallback, rpcErrorCallback);
             });
-            $(document).on('change', '#dimmer', function (event) {
+            // parameter: event
+            $(document).on('change', '#dimmer', function () {
                 // this will not effect CouchDB
                 aLightActuatorAPI.adjust(self.sess, parseInt($('#dimmer').val(), 10));
             });
