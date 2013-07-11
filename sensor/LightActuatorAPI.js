@@ -8,7 +8,8 @@ var Constant = require('../sensor/Constant');
 var CouchDB = require('../db/CouchDB');
 var Light = require('../sensor/Light');
 
-function LightActuator (configuration) {
+function LightActuator(configuration) {
+    "use strict";
     var self = this;
 
     self.aGenericComponent = new GenericComponent();
@@ -33,18 +34,16 @@ function LightActuator (configuration) {
      * @param successCallback (newLightStatus)
      * @param errorCallback (error)
      */
-    self.switchLight = function (lightId, successCallback,errorCallback){
-        var aCouchDB = new CouchDB('room');
-        var aLight = new Light();
-        if (!lightId || typeof lightId === 'function'){
-            if (errorCallback && typeof errorCallback === 'function'){
+    self.switchLight = function (lightId, successCallback, errorCallback) {
+        var aCouchDB = new CouchDB('room'),
+            aLight = new Light();
+        if (!lightId || typeof lightId === 'function') {
+            if (errorCallback && typeof errorCallback === 'function') {
                 errorCallback(Constant.Error.LightActuator.room);
-            }else{
+            } else {
                 throw Constant.Error.LightActuator.room;
             }
         }
-        aLight.checkLightState(lightId,successCB_1, errorCallback);
-
         /**
          * IMPORTANT: This function will effect the RPC API
          * that the browser connects to
@@ -61,26 +60,27 @@ function LightActuator (configuration) {
                 }
             }
         }
-    }
+        aLight.checkLightState(lightId, successCB_1, errorCallback);
+    };
     /**
      * switch the light on, ignore its current state
      * @param lightId {String} the id of the light
      * @param successCallback (body) update success body, information about the entry
      * @param errorCallback (error)
      */
-    self.switchOn = function (lightId, successCallback,errorCallback){
+    self.switchOn = function (lightId, successCallback, errorCallback) {
         var aCouchDB = new CouchDB('room');
-        if (!lightId || typeof lightId === 'function'){
-            if (errorCallback && typeof errorCallback === 'function'){
+        if (!lightId || typeof lightId === 'function') {
+            if (errorCallback && typeof errorCallback === 'function') {
                 errorCallback(Constant.Error.LightActuator.room);
-            }else{
+            } else {
                 throw Constant.Error.LightActuator.room;
             }
         }
-        aCouchDB.updateDocument(Constant.room.id,'isLightOn',
-            {isLightOn:Constant.ComponentSpec.default.switch.on},
+        aCouchDB.updateDocument(Constant.room.id, 'isLightOn',
+            {isLightOn: Constant.ComponentSpec.default.switch.on},
             successCallback, errorCallback);
-    }
+    };
     /**
      * switch the light off, ignore its current state;
      * if the light actuator support dimmer, the strength will be set to 0,
@@ -89,30 +89,30 @@ function LightActuator (configuration) {
      * @param successCallback (body) update success body, information about the entry
      * @param errorCallback (error)
      */
-    self.switchOff = function (lightId, successCallback,errorCallback){
+    self.switchOff = function (lightId, successCallback, errorCallback) {
         var aCouchDB = new CouchDB('room');
-        if (!lightId || typeof lightId === 'function'){
-            if (errorCallback && typeof errorCallback === 'function'){
+        if (!lightId || typeof lightId === 'function') {
+            if (errorCallback && typeof errorCallback === 'function') {
                 errorCallback(Constant.Error.LightActuator.room);
-            }else{
+            } else {
                 throw Constant.Error.LightActuator.room;
             }
         }
         // check if the component support dimmer
-        if (self.switchMode == 'dimmer'){
-            aCouchDB.updateDocument(Constant.room.id,'isLightOn',
+        if (self.switchMode === 'dimmer') {
+            aCouchDB.updateDocument(Constant.room.id, 'isLightOn',
                 {
-                    isLightOn:Constant.ComponentSpec.default.switch.off,
-                    strength:Constant.ComponentSpec.default.dimmer.strength
+                    isLightOn: Constant.ComponentSpec.default.switch.off,
+                    strength: Constant.ComponentSpec.default.dimmer.strength
                 },
                 successCallback, errorCallback);
-        }else{
-            aCouchDB.updateDocument(Constant.room.id,'isLightOn',
-                {isLightOn:Constant.ComponentSpec.default.switch.off},
+        } else {
+            aCouchDB.updateDocument(Constant.room.id, 'isLightOn',
+                {isLightOn: Constant.ComponentSpec.default.switch.off},
                 successCallback, errorCallback);
         }
 
-    }
+    };
 
     /**
      * update luminance
@@ -126,44 +126,45 @@ function LightActuator (configuration) {
      * @param errorCallback (error)
      */
     self.adjustLuminance = function (lightId, strength, successCallback, errorCallback) {
+        /*jslint nomen: true*/
+        var aCouchDB = new CouchDB('room'),
+            _strength;
         // dimmer mode should be supported, otherwise throw error
-        if (self.switchMode != Constant.ComponentSpec.default.switchMode.dimmer){
-            if (errorCallback && typeof errorCallback === 'function'){
+        if (self.switchMode !== Constant.ComponentSpec.default.switchMode.dimmer) {
+            if (errorCallback && typeof errorCallback === 'function') {
                 errorCallback(Constant.Error.LightActuator.dimmer);
-            }else{
+            } else {
                 throw Constant.Error.LightActuator.dimmer;
             }
         }
 
         // the strength should be a number, otherwise throw error
         if (strength.constructor !== Number) {
-            if (errorCallback && typeof errorCallback === 'function'){
+            if (errorCallback && typeof errorCallback === 'function') {
                 errorCallback(Constant.Error.LightActuator.strength);
-            }else{
+            } else {
                 throw Constant.Error.LightActuator.strength;
             }
         }
 
         // strength should be in the valid range otherwise throw error
         if (strength < 0 || strength > 100) {
-            if (errorCallback && typeof errorCallback === 'function'){
+            if (errorCallback && typeof errorCallback === 'function') {
                 errorCallback(Constant.Error.Light.strength);
-            }else{
+            } else {
                 throw Constant.Error.Light.strength;
             }
             return;
         }
-
-        var aCouchDB = new CouchDB('room');
         /* ---- HASN'T TESTED YET  ----*/
         // if the strength is 0, update the light to off; otherwise on
-        var _strength = parseInt(strength);
-        if (_strength == 0) {
-            aCouchDB.updateDocument(Constant.room.id,null,{isLightOn:false,strength:_strength},successCallback, errorCallback);
-        }else{
-            aCouchDB.updateDocument(Constant.room.id,null,{isLightOn:true,strength:_strength},successCallback, errorCallback);
+        _strength = parseInt(strength, 10);
+        if (_strength === 0) {
+            aCouchDB.updateDocument(Constant.room.id, null, {isLightOn: false, strength: _strength}, successCallback, errorCallback);
+        } else {
+            aCouchDB.updateDocument(Constant.room.id, null, {isLightOn: true, strength: _strength}, successCallback, errorCallback);
         }
-    }
+    };
 
     /**
      * reset current actuator state
@@ -193,11 +194,11 @@ function LightActuator (configuration) {
             options = {
                 componentType: Constant.ComponentSpec.type.actuator.switch,
                 deviceID: configuration.deviceID || Constant.ComponentSpec.default.did,
-                returnable:configuration.returnable || Constant.ReturnAble.false,
-                timeout:configuration.timeout || Constant.ComponentSpec.default.timeout,
-                rate:configuration.rate || Constant.ComponentSpec.default.rate,
+                returnable: configuration.returnable || Constant.ReturnAble.false,
+                timeout: configuration.timeout || Constant.ComponentSpec.default.timeout,
+                rate: configuration.rate || Constant.ComponentSpec.default.rate,
                 eventFireMode: configuration.eventFireMode || Constant.EventFireMode.valueChange,
-                position:configuration.position || new Constant.GeoPosition(),
+                position: configuration.position || new Constant.GeoPosition(),
                 maximumRange : configuration.maximumRange || Constant.ComponentSpec.default.hardware,
                 minDelay : configuration.minDelay || Constant.ComponentSpec.default.hardware,
                 power : configuration.power || Constant.ComponentSpec.default.hardware,
@@ -219,9 +220,9 @@ function LightActuator (configuration) {
 
             // configure Light Actuator
             self.switchMode = configuration.switchMode || Constant.ComponentSpec.default.switchMode.onoff;
-            self.strength = (self.switchMode == Constant.ComponentSpec.default.switchMode.onoff ) ?
+            self.strength = (self.switchMode === Constant.ComponentSpec.default.switchMode.onoff) ?
                 // on off mode
-                ( (configuration.strength == Constant.ComponentSpec.default.switch.on || configuration.strength == Constant.ComponentSpec.default.switch.off) ?
+                ( (configuration.strength === Constant.ComponentSpec.default.switch.on || configuration.strength === Constant.ComponentSpec.default.switch.off) ?
                     configuration.strength : Constant.ComponentSpec.default.switch.off )
                 // dimmer mode
                 : ( (configuration.strength >= 0 && configuration.strength<=100) ?

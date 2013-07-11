@@ -12,6 +12,7 @@ var Constant = require('./Constant');
  * @constructor
  */
 function GenericComponent() {
+    "use strict";
     var self = this;
 
     self.componentType = Constant.ComponentSpec.type.default; // componentType {String} e.g.
@@ -37,9 +38,11 @@ function GenericComponent() {
      * configuration object
      * @param options {Object}
      */
-    self.configureComponent = function (options){
-        for (var option in options){
-            switch (option) {
+    self.configureComponent = function (options) {
+        var option;
+        for (option in options) {
+            if (options.hasOwnProperty(option)) {
+                switch (option) {
                 case "componentType":
                     self.componentType = options[option];
                     break;
@@ -65,7 +68,7 @@ function GenericComponent() {
                     self.maximumRange = options[option];
                     break;
                 case "minDelay":
-                    self.minDelay =  options[option]
+                    self.minDelay =  options[option];
                     break;
                 case "power":
                     self.power = options[option];
@@ -79,11 +82,13 @@ function GenericComponent() {
                 case "version":
                     self.version = options[option];
                     break;
+                }
             }
         }
-    }
+    };
 
     self.componentEvent = function () {
+        /*jslint nomen: true*/
         var _self = this;
 
         _self.type = Constant.EventType.nothing; // sensor or actuator
@@ -100,9 +105,11 @@ function GenericComponent() {
          */
         _self.state = Constant.State.original;
 
-        _self.initComponentEvent = function(options){
-            for (var option in options){
-                switch (option) {
+        _self.initComponentEvent = function (options) {
+            var option;
+            for (option in options) {
+                if (options.hasOwnProperty(option)) {
+                    switch (option) {
                     case "type":
                         _self.type = options[option];
                         break;
@@ -124,38 +131,39 @@ function GenericComponent() {
                     case "state":
                         _self.state =  options[option];
                         break;
+                    }
                 }
             }
-        }
+        };
 
-        _self.doAction = function (successfulCallback,errorCallback) {
+        _self.doAction = function (successfulCallback, errorCallback) {
             switch (_self.type) {
-                case "actuator":
-                    _self.actuate(successfulCallback,errorCallback);
-                    break;
-                case "sensor":
-                    _self.sense(successfulCallback,errorCallback);
-                    break;
-                default:
-                    return null;
-                    break;
+            case "actuator":
+                _self.actuate(successfulCallback, errorCallback);
+                break;
+            case "sensor":
+                _self.sense(successfulCallback, errorCallback);
+                break;
+            default:
+                return null;
             }
-        }
+        };
         /**
          * I am not sure this part
          * do I need callback, or do I need predefine functions?
          */
-        _self.actuate = function (successfulCallback,errorCallback) {
-            _self.callback(successfulCallback,errorCallback);
+        _self.actuate = function (successfulCallback, errorCallback) {
+            _self.callback(successfulCallback, errorCallback);
             /* NEED TO PUT INTO CALLBACK, LET THE CB UPDATE THE STATE */
             _self.state += 1;
-        }
+        };
 
-        _self.sense = function (successfulCallback,errorCallback) {
-            _self.callback(successfulCallback,errorCallback);
-        }
+        _self.sense = function (successfulCallback, errorCallback) {
+            _self.callback(successfulCallback, errorCallback);
+        };
+        /*jslint nomen: false*/
     };
-};
+}
 
 module.exports = GenericComponent;
 

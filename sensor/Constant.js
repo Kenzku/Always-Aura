@@ -7,27 +7,27 @@
 exports.EventFireMode = {
     fixedInterval : "fixedinterval",
     valueChange : "valuechange"
-}
+};
 
 exports.ReturnAble = {
     true : true,
     false : false
-}
+};
 
 exports.CancelAble = {
     true : true,
     false : false
-}
+};
 
 exports.EventType = {
     nothing : "nothing",
     sensor : "sensor",
     actuator : "actuator"
-}
+};
 
 exports.State = {
     original : 0
-}
+};
 
 exports.room = {
     // this id identifies the light
@@ -39,7 +39,7 @@ exports.room = {
     subscribe : {
         lightStatus : 'Light Status'
     }
-}
+};
 
 exports.ComponentSpec = {
     default : {
@@ -56,7 +56,7 @@ exports.ComponentSpec = {
             dimmer : 'dimmer'
         },
         dimmer : {
-            strength : ( 0 % 100 ) / 100
+            strength : 0 //( 0 % 100 ) / 100
         },
         switch : {
             on : true,
@@ -85,7 +85,7 @@ exports.ComponentSpec = {
             switch : 'switch'
         }
     }
-}
+};
 
 exports.Error = {
     reset : {
@@ -110,10 +110,11 @@ exports.Error = {
     Light : {
         strength: 'strength out of range'
     }
-}
+};
 
 exports.GeoPosition = function () {
-    var latitude = 0.0;
-    var longitude = 0.0;
-    return {latitude:latitude,longitude:longitude};
-}
+    "use strict";
+    var latitude = 0.0,
+        longitude = 0.0;
+    return {latitude: latitude, longitude: longitude};
+};

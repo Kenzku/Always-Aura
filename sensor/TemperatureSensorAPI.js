@@ -26,17 +26,17 @@ function TemperatureSensor(configuration) {
      * Generic Sensor API
      * @return {{}}
      */
-    self.updateTemperatureOnSensor = function (successfulCallback,errorCallback) {
+    self.updateTemperatureOnSensor = function (successfulCallback, errorCallback) {
         /* Need To Do - currently testing on one sample data */
         var aCouchDB = new CouchDB('saku_snabb');
         aCouchDB.readDocument(self.aGenericComponent.deviceID,
             // success CB
-            function(body){
-                if (successfulCallback && typeof successfulCallback === 'function'){
+            function (body) {
+                if (successfulCallback && typeof successfulCallback === 'function') {
                     var data;
-                    if(!body.data) {
+                    if (!body.data) {
                         data = Constant.ComponentSpec.default.data;
-                    }else{
+                    } else {
                         data = body.data.c0 ? { c0: body.data.c0 } : Constant.ComponentSpec.default.data;
                     }
                     self.aComponentEvent.returnValue = data;
@@ -45,8 +45,8 @@ function TemperatureSensor(configuration) {
                 }
             },
             // error CB
-            function(err){
-                if (errorCallback && typeof errorCallback === 'function'){
+            function (err) {
+                if (errorCallback && typeof errorCallback === 'function') {
                     errorCallback(err);
                 }
             });
@@ -56,8 +56,8 @@ function TemperatureSensor(configuration) {
      * This might be an asynchronous function
      * @return {number}
      */
-    self.currentTemperature = function (successfulCallback,errorCallback) {
-        self.aComponentEvent.doAction(successfulCallback,errorCallback);
+    self.currentTemperature = function (successfulCallback, errorCallback) {
+        self.aComponentEvent.doAction(successfulCallback, errorCallback);
     };
     /**
      * reset current sensor state
@@ -88,11 +88,11 @@ function TemperatureSensor(configuration) {
             options = {
                 componentType: Constant.ComponentSpec.type.sensor.temperature,
                 deviceID: configuration.deviceID || Constant.ComponentSpec.default.did,
-                returnable:configuration.returnable || Constant.ReturnAble.false,
-                timeout:configuration.timeout || Constant.ComponentSpec.default.timeout,
-                rate:configuration.rate || Constant.ComponentSpec.default.rate,
+                returnable: configuration.returnable || Constant.ReturnAble.false,
+                timeout: configuration.timeout || Constant.ComponentSpec.default.timeout,
+                rate: configuration.rate || Constant.ComponentSpec.default.rate,
                 eventFireMode: configuration.eventFireMode || Constant.EventFireMode.valueChange,
-                position:configuration.position || new Constant.GeoPosition(),
+                position: configuration.position || new Constant.GeoPosition(),
                 maximumRange : configuration.maximumRange || Constant.ComponentSpec.default.hardware,
                 minDelay : configuration.minDelay || Constant.ComponentSpec.default.hardware,
                 power : configuration.power || Constant.ComponentSpec.default.hardware,
@@ -111,7 +111,7 @@ function TemperatureSensor(configuration) {
                 callback : self.updateTemperatureOnSensor
             };
             self.aComponentEvent.initComponentEvent(options);
-        }else{
+        } else {
             options = {
                 componentType: Constant.ComponentSpec.type.sensor.temperature,
                 type : Constant.EventType.sensor,
@@ -138,7 +138,7 @@ function TemperatureSensor(configuration) {
 
             type : self.aComponentEvent.type,
             cancelable: self.aComponentEvent.cancelable
-        }
+        };
     };
     /**
      * return temperature data
@@ -147,20 +147,20 @@ function TemperatureSensor(configuration) {
      * @param successfulCallback {function} called when get data successfully
      * @returns {{}} if isInit is true, otherwise return true.
      */
-    self.getData = function (isInit,successfulCallback){
-        if(isInit){
+    self.getData = function (isInit, successfulCallback) {
+        if (isInit) {
             return self.configuration;
-        }else{
-            if (successfulCallback && typeof successfulCallback === 'function'){
-                successfulCallback({data:self.temperature});
-            }
-            return true;
         }
+        // this is for 'unexpected else after return'
+        if (successfulCallback && typeof successfulCallback === 'function') {
+            successfulCallback({data: self.temperature});
+        }
+        return true;
     };
 
     (self.init = function () {
         self.config(configuration);
-    })();
+    }).call(); // `call` is for avoiding `bad invocation`
 }
 
 module.exports = TemperatureSensor;
